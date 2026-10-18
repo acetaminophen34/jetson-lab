@@ -1,6 +1,8 @@
 # PS4 Eyeで撮影・配信する
 
-firmwareロード、OpenCVでの画像取得・保存、Safariへの配信、人物と背景の相対視差表示まで動作しました。
+PS4 Eyeから左右の映像を取り込み、MacのSafariへ配信します。画像の保存と、人物・背景の距離の違いを色で表示する処理も作成しました。
+
+以下のコマンドはJetsonで実行します。
 
 ## 1. ライブラリを入れる
 
@@ -16,7 +18,7 @@ python3 -c 'import cv2,numpy,flask,usb; print(cv2.__version__,numpy.__version__,
 
 ## 2. ローダーを取得する
 
-[sieuwe1のプロジェクト](https://github.com/sieuwe1/PS4-eye-camera-for-linux-with-python-and-OpenCV) を使います。firmwareは同梱されていますが、配布ライセンスは不明のためこのrepoへは含めません。
+[sieuwe1のプロジェクト](https://github.com/sieuwe1/PS4-eye-camera-for-linux-with-python-and-OpenCV) を使います。カメラを起動するファームウェアも配布元に含まれています（ライセンス不明のため、このリポジトリには含めていません）。
 
 ```bash
 mkdir -p ~/jetson-work
@@ -25,12 +27,11 @@ git clone https://github.com/sieuwe1/PS4-eye-camera-for-linux-with-python-and-Op
 cd ps4-eye-upstream
 git checkout 4180061a1afd109a9204557f256d341c5850c124
 cd Firmware_loader
-echo '141454ec1e57a5d0f400b4a345aefb37a7b8178eb9bf9abc25187c27f34a1da4  firmware_V2.bin' | sha256sum -c -
 ```
 
 ## 3. firmwareをロードする
 
-Firmware_loader内で実行します。動作時はUSB IDが05a9:0580から05a9:058aへ変わりました。
+カメラを接続し、ファームウェアを読み込ませて起動します。
 
 ```bash
 sudo modprobe uvcvideo
@@ -38,11 +39,11 @@ cd ~/jetson-work/ps4-eye-upstream/Firmware_loader
 sudo python3 ps4eye_init.py
 ```
 
-保存ローダーはfirmware_V2.bin固定ですが、058aはV1扱いのIDです。使うカメラとfirmwareの適合を確認してください。
+ローダーは `firmware_V2.bin` を読み込みます。過去の動作時はUSB IDが `05a9:0580` から `05a9:058a` へ変わりました。配布元では058aをV1として扱っており、ファームウェアの名前とは一致しません。
 
 ## 4. USB・V4L2を確認する
 
-動作時は `/dev/video0` と次のYUYV対応モードが認識されました。
+`lsusb` でカメラ、`v4l2-ctl` で映像入力が見えることを確認します。使用時は `/dev/video0` と、下表のYUYV形式が表示されました。
 
 ```bash
 lsusb
@@ -61,7 +62,7 @@ v4l2-ctl -d /dev/video0 --list-ctrls-menus
 
 ## 5. 自作コードを配置する
 
-6本を作業先へコピーします。互換patchはFlaskのsnapshot引数、Python3.6のunlink、校正ファイルのホームパスを修正する互換案です（未検証）。
+自作Pythonコード6本を作業用フォルダへコピーします。続けて、古いFlask・Python3.6への対応と、校正ファイルの読み込み先を直すパッチを適用します（この互換パッチを使った起動は未検証）。
 
 ```bash
 mkdir ~/jetson-work/ps4-eye-custom
@@ -74,9 +75,9 @@ git apply ~/Projects/jetson-lab/ps4-eye/patches/depth-stream-home-path.patch
 
 | コード | 用途 |
 |---|---|
-| [ps4_stream.py](scripts/ps4_stream.py) | RGB配信、ゲイン調整、snapshot |
+| [ps4_stream.py](scripts/ps4_stream.py) | カラー映像の配信、明るさ調整、画像保存 |
 | [ps4_calib_capture.py](scripts/ps4_calib_capture.py) | 左右校正画像を保存 |
-| [ps4_calibrate.py](scripts/ps4_calibrate.py) | 画像から校正NPZを計算 |
+| [ps4_calibrate.py](scripts/ps4_calibrate.py) | 左右の画像からカメラの校正データを計算 |
 | [ps4_depth_stream.py](scripts/ps4_depth_stream.py) | 校正済み深度配信 |
 | [ps4_depth.py](scripts/ps4_depth.py) | 試作：未校正の視差表示 |
 | [ps4_depth_test.py](scripts/ps4_depth_test.py) | 試作：左右順の比較 |
@@ -98,7 +99,7 @@ python3 ps4_stream.py
 | Camera A | frame[0:800, 48:1328] → 1280×800 |
 | Camera B | frame[0:800, 1328:2608] → 1280×800 |
 
-左右の切り出し・向き・色表示を修正して配信できました。終了はCtrl+C。別のカメラ取得コードとは同時起動しません。配信は認証なしの0.0.0.0待受です。
+ブラウザに左右のカラー映像が表示されれば成功です。終了はCtrl+C。カメラを使うスクリプトは1本ずつ起動してください。配信にログイン機能はないため、信頼できるLAN内で使います。
 
 ## 7. 校正・深度処理
 

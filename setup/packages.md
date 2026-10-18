@@ -4,11 +4,7 @@
 
 ## 1. SSHで接続する
 
-openssh-serverが無い場合だけ導入します。
-
-```bash
-dpkg-query -W openssh-server
-```
+SSH接続に必要なソフトを入れます。インストール済みなら、そのまま次へ進めます。
 
 ```bash
 sudo apt update
@@ -54,14 +50,9 @@ sudo apt install --no-install-recommends --no-upgrade \
   python3 python3-pip python3-dev cmake
 ```
 
-aptの配布先はUbuntuのbionicと、機種に対応するNVIDIAリポジトリです。
+Ubuntu18.04の配布名はbionicです。別のUbuntu向け配布先へ変更しないでください。
 
-```bash
-grep -RhE '^[[:space:]]*deb ' /etc/apt/sources.list /etc/apt/sources.list.d/
-apt-cache policy
-```
-
-## 3. バージョンとCUDA
+## 3. インストールしたソフトを確認する
 
 ```bash
 python3 --version
@@ -104,7 +95,7 @@ Python3.6ではpipを無条件に最新版へ更新しません。
 
 ### CUDAのPATH
 
-絶対パスのnvccは動くのに `nvcc` が見つからない場合、同じ設定がないことを確認して追記します。
+`nvcc: command not found` と出る場合は、CUDAのコマンドを探す場所を追加します。
 
 ```bash
 echo 'export PATH=/usr/local/cuda-10.2/bin:$PATH' >> ~/.bashrc
@@ -114,7 +105,7 @@ nvcc --version
 
 ## 4. 負荷表示とjtop
 
-[tegrastats](https://docs.nvidia.com/jetson/archives/l4t-archived/l4t-3276/Tegra%20Linux%20Driver%20Package%20Development%20Guide/AppendixTegraStats.html) はCtrl+Cで終了します。
+[tegrastats](https://docs.nvidia.com/jetson/archives/l4t-archived/l4t-3276/Tegra%20Linux%20Driver%20Package%20Development%20Guide/AppendixTegraStats.html) でCPU・GPU・メモリの使用状況を表示します。終了はCtrl+Cです。
 
 ```bash
 sudo tegrastats --interval 1000
@@ -166,13 +157,12 @@ g++-8 --version
 
 ## 6. CMake3.28.6
 
-[Kitware公式](https://github.com/Kitware/CMake/releases/tag/v3.28.6) のLinux aarch64版を展開します。
+ビルド設定を作るCMakeは、標準版より新しい3.28.6を使います。[Kitware公式](https://github.com/Kitware/CMake/releases/tag/v3.28.6) からJetson用のLinux aarch64版を取得して展開します。
 
 ```bash
 mkdir -p ~/opt ~/Downloads
 cd ~/Downloads
 wget https://github.com/Kitware/CMake/releases/download/v3.28.6/cmake-3.28.6-linux-aarch64.tar.gz
-echo '7909cc2128ce9442c63ce674a0bfb0e4f4ce04cef667d887e15ad5670d594ba7  cmake-3.28.6-linux-aarch64.tar.gz' | sha256sum -c -
 tar -xzf cmake-3.28.6-linux-aarch64.tar.gz -C ~/opt
 ~/opt/cmake-3.28.6-linux-aarch64/bin/cmake --version
 ```

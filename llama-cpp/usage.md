@@ -2,7 +2,7 @@
 
 モデルの配置は [導入記事](README.md#モデルを用意する) を参照してください。`llama-cli` は文章生成・対話、`llama-bench` は性能測定に使います。
 
-## 1. 実行するバイナリを選ぶ
+## 1. 実行ファイルのあるフォルダへ移動する
 
 **Nano CPU：**
 
@@ -16,7 +16,7 @@ cd ~/jetson-work/llama-cpu/build-cpu/bin
 cd ~/jetson-work/llama-tx2/build-gpu/bin
 ```
 
-以下はこのディレクトリから実行します。CPUは `-ngl 0`、TX2のGPU実行は `-ngl 99` です。TX2のCUDAバイナリでも `-ngl 0` でCPU実行できます。
+以下はこのディレクトリから実行します。CPUは `-ngl 0`、TX2のGPU実行は `-ngl 99` です。TX2のCUDA版でも `-ngl 0` でCPU実行できます。
 
 ## 2. 文章を生成する
 
@@ -43,7 +43,7 @@ LD_LIBRARY_PATH=. ./llama-cli \
 
 | オプション | 内容 | 設定例 |
 |---|---|---|
-| `-m` | GGUFモデルのパス | `-m ../models/Qwen3-0.6B-Q4_K_M.gguf` |
+| `-m` | GGUFモデルのパス | `-m ~/jetson-work/models/Qwen3-0.6B-Q4_K_M.gguf` |
 | `-ngl` | GPUへ配置するレイヤー数。0でCPU実行 | `-ngl 0` / `-ngl 99` |
 | `-t` | CPUスレッド数 | `-t 4` |
 | `-c` | 入力・会話履歴・出力を保持するコンテキスト長 | `-c 512` |
@@ -94,7 +94,7 @@ LD_LIBRARY_PATH=. ./llama-bench \
 
 CPUは `-ngl 0`、スレッド数をまとめて測る場合は `-t 1,2,4` に変更します。pp128は入力処理、tg32は文章生成の速度（tokens/s）です。
 
-### Nano CPU：元GGUF
+### Nano CPU：以前から使用していたモデル
 
 | スレッド | pp128 | tg32 |
 |---:|---:|---:|
@@ -119,7 +119,7 @@ CUDA0 model buffer size = 372.65 MiB
 
 ### Nanoの短いプロンプト測定
 
-62df1815bで使った引数です。上のbenchとは別に、2スレッド・ctx512・生成上限32で測定しました。
+上のベンチマークとは別に、62df1815bを使って短い質問への応答速度を測りました。CPUは2スレッド、会話を保持する枠は512トークン、回答の上限は32トークンです。
 
 ```bash
 cd ~/jetson-work/llama-cpu

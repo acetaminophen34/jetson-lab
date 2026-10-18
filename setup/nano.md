@@ -13,11 +13,10 @@ curl -fL --retry 3 -o jetson-nano-jp461-sd-card-image.zip \
   https://developer.nvidia.com/embedded/l4t/r32_release_v7.1/jp_4.6.1_b110_sd_card/jeston_nano/jetson-nano-jp461-sd-card-image.zip
 ```
 
-ZIPの破損を確認します。公式SHA256の期待値は不明です。
+ダウンロードしたZIPを展開できるか確認します。最後にエラーがなければEtcherへ進みます。
 
 ```bash
 cd ~/Downloads
-shasum -a 256 jetson-nano-jp461-sd-card-image.zip
 unzip -t jetson-nano-jp461-sd-card-image.zip
 ```
 
@@ -41,7 +40,7 @@ diskutil list external
 
 ## 4. Nano：Ubuntuの初回設定
 
-画面の案内に従い、ユーザー名・パスワード・ホスト名を設定します。APPパーティションは通常、提示される最大容量を選びます。
+画面の案内に従い、ユーザー名・パスワード・ホスト名を設定します。APP（Ubuntuを保存する領域）は、通常は提示される最大容量を選びます。
 
 ```bash
 whoami
@@ -53,12 +52,12 @@ free -h
 
 有線LANまたはWi-FiでMacと同じネットワークへ接続します。
 
-## 5. SDKが不足している場合
+## 5. CUDAなどが入っていない場合
 
-[JetPack4.6.1](https://developer.nvidia.com/embedded/jetpack-sdk-461) のパッケージを追加します。既にCUDA・OpenCV等が入っていれば不要です。
+CUDAやOpenCVが入っていない場合は、[JetPack4.6.1](https://developer.nvidia.com/embedded/jetpack-sdk-461) の開発用ソフトを追加します。既に入っていれば次へ進みます。
 
 ```bash
-apt-cache policy nvidia-jetpack cuda-toolkit-10-2 libcudnn8 tensorrt libopencv
+sudo apt update
 sudo apt install --no-upgrade nvidia-jetpack=4.6.1-b110
 ```
 

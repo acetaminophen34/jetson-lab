@@ -1,6 +1,6 @@
 # ステレオ校正と距離計算
 
-[撮影コードの配置](README.md#5-自作コードを配置する) を先に済ませます。距離は既知の長さと照合して使います。
+[撮影コードの配置](README.md#5-自作コードを配置する) を先に済ませます。左右の画像のずれから距離を計算するため、カメラの校正データを用意します。絶対距離の精度は確認していません。
 
 ## 1. 既存の校正データを使う
 
@@ -22,7 +22,7 @@ ls ~/ps4_calib/pairs/
 mv ~/ps4_calib ~/ps4_calib.previous
 ```
 
-内部コーナー9×6、格子1辺20mmのパターンを使います。撮影画面 `http://<jetson-ip>:5002/` で位置・傾きを変えて10組以上保存します。
+白黒のマス目が交わる点を横9個・縦6個数えられる、1マス20mmのチェッカーボードを使います。撮影画面 `http://<jetson-ip>:5002/` で位置・傾きを変えて10組以上保存します。
 
 ```bash
 cd ~/jetson-work/ps4-eye-custom
@@ -35,7 +35,7 @@ Ctrl+Cで撮影を終了し、計算します。
 python3 ps4_calibrate.py
 ```
 
-入力は `~/ps4_calib/pairs/`、出力は `stereo_calibration.npz` と `rectified_preview.jpg` です。保存NPZのRMSはA0.379786、B0.373186、stereo0.394356px、基線長は約80.03mmでした。
+入力は `~/ps4_calib/pairs/`、出力は `stereo_calibration.npz` と `rectified_preview.jpg` です。以前の計算結果では、画像上のずれを表すRMS誤差がA0.379786、B0.373186、左右一組で0.394356pxでした。左右カメラの間隔の計算値は約80.03mmです。
 
 ## 3. 深度配信
 

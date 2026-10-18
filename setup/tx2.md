@@ -1,6 +1,6 @@
 # TX2の環境構築
 
-L4T R32.7.6が導入済みのTX2へSDKを追加しました。OSの書き込みは行っていません。
+UbuntuとL4T R32.7.6が入っているTX2に、CUDAなどの開発用ソフトを追加する手順です。
 
 | 項目 | 使用環境 |
 |---|---|
@@ -14,7 +14,7 @@ L4T R32.7.6が導入済みのTX2へSDKを追加しました。OSの書き込み�
 
 ## 1. JetPackを追加する
 
-[NVIDIA公式JetPack4.6.6](https://developer.nvidia.com/jetpack-sdk-466) のSDKを導入します。導入後、JetPack4.6.6、CUDA Toolkit10.2、cuBLAS、cuDNNが入りました。
+[JetPack4.6.6](https://developer.nvidia.com/jetpack-sdk-466) を入れると、CUDA10.2とGPU計算用ライブラリが導入されます。
 
 ```bash
 sudo apt update
@@ -23,7 +23,7 @@ sudo apt install nvidia-jetpack=4.6.6-b24
 
 ## 2. 電源モード
 
-初期状態はMAXP_CORE_ARM（モード3）で一部CPUコアがOFFでした。MAXN（モード0）へ変更するとオンラインになりました。
+全CPUコアを使うため、電源モードをMAXN（モード0）へ変更します。元のMAXP_CORE_ARM（モード3）では一部のコアが停止していました。
 
 ```bash
 sudo nvpmodel -q

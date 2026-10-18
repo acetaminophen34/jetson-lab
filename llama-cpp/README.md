@@ -1,6 +1,8 @@
 # llama.cppの導入・ビルド
 
-[共通開発ツール](../setup/packages.md) のGCC/G++8.4.0、CMake3.28.6を使います。
+llama.cppは、GGUF形式のモデルを使って文章を生成するプログラムです。[共通開発ツール](../setup/packages.md) のGCC/G++8.4.0とCMake3.28.6を準備してから進めます。
+
+NanoでCPUを使う場合はこのページ、TX2でGPUを使う場合は [CUDAビルド](gpu.md) へ進みます。
 
 | 構成 | ソースcommit | 作業先 | 手順 |
 |---|---|---|---|
@@ -12,7 +14,7 @@
 
 ### 1. ソース取得とpatch適用
 
-[llama.cpp](https://github.com/ggml-org/llama.cpp) を取得し、固定commitに [CPU用patch](patches/llama.patch) を適用します。[修正理由](patches/README.md) はNEON互換、stdc++fsリンク、include・型指定の補完です。
+[llama.cpp](https://github.com/ggml-org/llama.cpp) を取得し、使用したバージョンへ切り替えます。続けて [修正パッチ](patches/llama.patch) を適用し、古いARM環境とGCC8でビルドできるようにします。詳しい変更点は [パッチの説明](patches/README.md) にあります。
 
 ```bash
 mkdir -p ~/jetson-work
@@ -26,7 +28,7 @@ git apply ~/Projects/jetson-lab/llama-cpp/patches/llama.patch
 
 ### 2. ビルド
 
-CUDAを無効化してGCC8を指定します。このcommitのCLIにはSERVER=ONが必要です。
+GPUを使わず、GCC8でビルドします。このバージョンでは文章生成コマンドを作るために `LLAMA_BUILD_SERVER=ON` も必要です。
 
 ```bash
 ~/opt/cmake-3.28.6-linux-aarch64/bin/cmake -S . -B build-cpu \
@@ -40,15 +42,11 @@ CUDAを無効化してGCC8を指定します。このcommitのCLIにはSERVER=ON
   --target llama-cli llama-bench --parallel 1
 ```
 
-実行ファイルと.soは `build-cpu/bin/` に生成されます。PREBUILT_UI=OFFは外部UI資産を取得しないための指定です。
+完了すると `build-cpu/bin/` に `llama-cli` と `llama-bench` ができます。`LLAMA_USE_PREBUILT_UI=OFF` は、不要なWeb画面のデータをダウンロードしないための指定です。
 
 ## モデルを用意する
 
-いずれか一方を `~/jetson-work/models/` に配置します。Nanoの元GGUFとTX2で使ったUnsloth版は別ファイルです。
-
-### Unsloth版
-
-TX2では [Unsloth Qwen3-0.6B-Q4_K_M](https://huggingface.co/unsloth/Qwen3-0.6B-GGUF) を使用しました（Apache-2.0）。測定時の配布revisionは記録していません。
+文章生成に使うQwen3-0.6BのGGUFファイルをダウンロードします。[Unslothの配布ページ](https://huggingface.co/unsloth/Qwen3-0.6B-GGUF) のQ4_K_M版です（Apache-2.0）。TX2ではこの配布元のモデルを使用しました。
 
 ```bash
 mkdir -p ~/jetson-work/models
@@ -57,21 +55,17 @@ wget -O Qwen3-0.6B-Q4_K_M.gguf \
   https://huggingface.co/unsloth/Qwen3-0.6B-GGUF/resolve/main/Qwen3-0.6B-Q4_K_M.gguf
 ```
 
-固定版を使う場合の [revision指定URL](https://huggingface.co/unsloth/Qwen3-0.6B-GGUF/resolve/50968a4468ef4233ed78cd7c3de230dd1d61a56b/Qwen3-0.6B-Q4_K_M.gguf) とSHA256です。上のwgetのURLを置き換えます。
+配布内容を固定して取得したい場合は、上のURLを [バージョン固定のURL](https://huggingface.co/unsloth/Qwen3-0.6B-GGUF/resolve/50968a4468ef4233ed78cd7c3de230dd1d61a56b/Qwen3-0.6B-Q4_K_M.gguf) に置き換えます。
 
-```bash
-echo 'ac2d97712095a558e31573f62f466a3f9d93990898b0ec79d7c974c1780d524a  Qwen3-0.6B-Q4_K_M.gguf' | sha256sum -c -
-```
+ダウンロードが終わったら [モデルの実行・設定・ベンチマーク](usage.md) へ進みます。
 
-### Nanoで使った元GGUF
+### Nanoで以前使ったモデルを使う場合
 
-公開URLは不明です。484220000bytesの元ファイルを使います。運用時の保存先は `~/robi-llm/models/` でした。
+以前のモデルは `~/robi-llm/models/` に保存していました。入手元は不明のため、同じファイルが必要な場合は手元に残したものをコピーします。次は、そのファイルをDownloadsへ置いた場合の例です。上のダウンロードとどちらか一方を行ってください。
 
 ```bash
 mkdir -p ~/jetson-work/models
 cp ~/Downloads/Qwen3-0.6B-Q4_K_M.gguf ~/jetson-work/models/
-cd ~/jetson-work/models
-echo '7af3fdf842f87b24672f8a7f1dd50404043f0bfb71093ff91c31d2b49df4631d  Qwen3-0.6B-Q4_K_M.gguf' | sha256sum -c -
 ```
 
-次へ：[モデルの実行・設定・ベンチマーク](usage.md)。
+NanoとTX2の測定には別の配布ファイルを使用しています。測定結果は [使い方](usage.md#6-ベンチマーク) にまとめています。

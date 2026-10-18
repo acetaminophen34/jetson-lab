@@ -12,4 +12,12 @@ Nano 4GB（JetPack4.6.1）とTX2（JetPack4.6.6）でllama.cppとPS4 Eyeを使�
 
 カメラ：[PS4 Eyeの撮影・配信](ps4-eye/README.md) → [校正・距離計算](ps4-eye/calibration.md)。
 
-記事・patchは `~/Projects/jetson-lab`、作業先は `~/jetson-work` に置く例です。
+以降のコマンドでは、Jetson上の `~/Projects/jetson-lab` にこのリポジトリがあるものとします。ソースやモデルは `~/jetson-work` に置きます。
+
+初期設定と共通パッケージの導入後、Jetson側で取得してください。
+
+```bash
+mkdir -p ~/Projects
+cd ~/Projects
+git clone https://github.com/acetaminophen34/jetson-lab.git
+```
