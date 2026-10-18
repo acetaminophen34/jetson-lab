@@ -38,5 +38,25 @@
     "path": "licenses/llama5050gpu-LICENSE",
     "bytes": 1078,
     "sha256": "e562a2ddfaf8280537795ac5ecd34e3012b6582a147ef69ba6a6a5c08c84757d"
+  },
+  {
+    "path": "patches/llama-cpu-legacy-neon-guard.patch",
+    "bytes": 325,
+    "sha256": "43dc15bc9d576958d23f1ec39f752926e71a5600ddcd43b5036bd0cf1cff323d"
+  },
+  {
+    "path": "patches/ps4-eye/depth-stream-home-path.patch",
+    "bytes": 437,
+    "sha256": "4a5ba52fdadf7a0e9f46410f71cbffb0c267b474e5747c50d3173dc747c88290"
+  },
+  {
+    "path": "patches/ps4-eye/ps4-calib-python36.patch",
+    "bytes": 477,
+    "sha256": "88ccbae813073c986dcd7f4366135f3f34a7c7b1344963ae0e0bd8ef643b20c4"
+  },
+  {
+    "path": "patches/ps4-eye/ps4-stream-flask012.patch",
+    "bytes": 270,
+    "sha256": "4695bb2b8b519d76d2ddd4d9694c374dd5dd49dea0773824d6eb1be35755cc10"
   }
 ]

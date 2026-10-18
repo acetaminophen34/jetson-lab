@@ -64,9 +64,13 @@ git diff --stat
 
 これは説明用の表記で、具体的なコマンドは各ビルド記事を使います。三つの固定commitへの適用チェックは既存資料で静的確認済みです。編集工程ではこの適用を実機ビルド成功と読み替えません。
 
-3個の.bakや未追跡JPEGは回収済みですが、実行に必要なpatchへ混ぜず元保全領域に残しています。原patchに追加ファイルは含まれないため、BF16ヘッダは別ファイルとして管理します。
+3個の.bakは原保全先に残し、独自変更が残った1個を [試作guardの独立patch](../../../patches/llama-cpu-legacy-neon-guard.patch) として新たに保全しました。他2個はベースHEADと同一です。画像の回収件数の訂正は [棚卸し](../../../reference/code-inventory.md) を参照してください。原patchに追加ファイルは含まれないため、BF16ヘッダは別ファイルとして管理します。
 
 ## 参照資料・ライセンス
 
 - [出典S2・S3・S7](../../../reference/sources.md)、[原リンク記録](../../../reference/details/current-build-links.md)
 - [LICENSE](../../../LICENSE)、[第三者MIT通知](../../../licenses/jetson-patches-LICENSE)
+
+## 試作と実装の参照
+
+現行3patchと独立したNEON guard原案、自作カメラへの未適用互換案、各ベースと適用方法は [patches README](../../../patches/README.md) に一覧化しました。保全・環境・検証に使った旧スクリプトも [scripts README](../../../scripts/README.md) から参照できます。

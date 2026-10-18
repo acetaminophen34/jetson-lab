@@ -1,0 +1,11 @@
+--- a/ggml/src/ggml-cpu/ggml-cpu-impl.h
++++ b/ggml/src/ggml-cpu/ggml-cpu-impl.h
+@@ -84,7 +84,7 @@
+ #define ggml_vld1q_u32(w,x,y,z) { (w), (x), (y), (z) }
+ #endif // _MSC_VER
+ 
+-#if !defined(__aarch64__)
++#if !defined(__aarch64__) || (defined(__GNUC__) && !defined(__clang__) && __GNUC__ < 9)
+ 
+ // 32-bit ARM compatibility
+ 

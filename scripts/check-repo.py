@@ -11,7 +11,7 @@ from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
 ROOT_FILES = {'README.md', 'LICENSE', '.gitignore', '.gitattributes'}
-PREFIXES = {'docs', 'scripts', 'patches', 'reference', 'licenses'}
+PREFIXES = {'docs', 'src', 'scripts', 'patches', 'reference', 'licenses'}
 EXTENSIONS = {'.md', '.json', '.sh', '.py', '.patch', '.h', '.hpp'}
 SECRET = re.compile(r'(?:-----BEGIN [A-Z ]*PRIVATE KEY-----|(?:ghp_|github_pat_|hf_)[A-Za-z0-9_]{20,}|sk-[A-Za-z0-9]{20,}|https?://[^/\s:@]+:[^/\s@]+@|/(?:Users)/[^/\s]+|/(?:home)/(?:a62ss)|192\.168\.[0-9]+\.[0-9]+)')
 SECRET_LITERAL = re.compile(r"(?i)\b(?:password|passwd|api[_-]?key|access[_-]?token|secret)[\"']?\s*[:=]\s*[\"'][^\"'\n]{8,}[\"']")
@@ -103,6 +103,16 @@ for asset in json.loads((ROOT / 'reference/asset-manifest.json').read_text()):
     path = ROOT / asset['path']
     if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != asset['sha256']:
         errors.append('Original asset hash mismatch: ' + asset['path'])
+
+# Original copied code is immutable apart from the recorded privacy transformation.
+origins_path = ROOT / 'reference/code-origins.json'
+if origins_path.exists():
+    for record in json.loads(origins_path.read_text())['entries']:
+        path = ROOT / record['public_path']
+        if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != record['public_sha256']:
+            errors.append('Source provenance hash mismatch: ' + record['public_path'])
+        if record['preservation'] == 'verbatim' and record['original_sha256'] != record['public_sha256']:
+            errors.append('Unrecorded source modification: ' + record['public_path'])
 
 commits = []
 if (ROOT / '.git').exists():

@@ -1,0 +1,16 @@
+--- a/ps4_calib_capture.py
++++ b/ps4_calib_capture.py
+@@ -212,8 +212,11 @@
+     if not (saved_a and saved_b):
+         with lock:
+             count -= 1
+-        pa.unlink(missing_ok=True)
+-        pb.unlink(missing_ok=True)
++        for failed_path in (pa, pb):
++            try:
++                failed_path.unlink()
++            except FileNotFoundError:
++                pass
+         return jsonify(ok=False, message="保存に失敗しました")
+ 
+     return jsonify(

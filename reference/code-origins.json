@@ -1,0 +1,340 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "public_path": "src/ps4-eye/ps4_calib_capture.py",
+      "source_paths": [
+        "$PRIVATE/followup-20261018-134602/files/<JETSON_HOME>/ps4_calib_capture.py"
+      ],
+      "original_sha256": "d66fe414bc0357005860308a865d3c0d02a68fb45473bd82fcce77f55b18b80a",
+      "public_sha256": "d66fe414bc0357005860308a865d3c0d02a68fb45473bd82fcce77f55b18b80a",
+      "original_bytes": 6732,
+      "public_bytes": 6732,
+      "preservation": "verbatim",
+      "redactions": [],
+      "classification": "user_declared_project_code",
+      "license": "no_new_license_granted",
+      "verification": "bytes_and_static_only"
+    },
+    {
+      "public_path": "src/ps4-eye/ps4_calibrate.py",
+      "source_paths": [
+        "$PRIVATE/followup-20261018-134602/files/<JETSON_HOME>/ps4_calibrate.py"
+      ],
+      "original_sha256": "5bfbb7333a28dbce9b57385b1d46aa423161f8db5d04149660589152e679bbe1",
+      "public_sha256": "5bfbb7333a28dbce9b57385b1d46aa423161f8db5d04149660589152e679bbe1",
+      "original_bytes": 4732,
+      "public_bytes": 4732,
+      "preservation": "verbatim",
+      "redactions": [],
+      "classification": "user_declared_project_code",
+      "license": "no_new_license_granted",
+      "verification": "bytes_and_static_only"
+    },
+    {
+      "public_path": "src/ps4-eye/ps4_depth.py",
+      "source_paths": [
+        "$PRIVATE/followup-20261018-134602/files/<JETSON_HOME>/ps4_depth.py"
+      ],
+      "original_sha256": "b4dcc1e2c630c975dd9189cb580b06f253ce5c11123e9ce300e41787e56a3095",
+      "public_sha256": "b4dcc1e2c630c975dd9189cb580b06f253ce5c11123e9ce300e41787e56a3095",
+      "original_bytes": 1962,
+      "public_bytes": 1962,
+      "preservation": "verbatim",
+      "redactions": [],
+      "classification": "user_declared_project_code",
+      "license": "no_new_license_granted",
+      "verification": "bytes_and_static_only"
+    },
+    {
+      "public_path": "src/ps4-eye/ps4_depth_stream.py",
+      "source_paths": [
+        "$PRIVATE/followup-20261018-134602/files/<JETSON_HOME>/ps4_depth_stream.py"
+      ],
+      "original_sha256": "da7abafbd7ff8eb017d08c628968fa13f75f652cb43c07c791378dd27642740f",
+      "public_sha256": "a7ea9f2d00fd7e5ae8866f84248ae3dc1a8ab43a7fc1c8b2c7db81ee194f1e25",
+      "original_bytes": 9094,
+      "public_bytes": 9100,
+      "preservation": "redacted",
+      "redactions": [
+        {
+          "kind": "machine_specific_home",
+          "placeholder": "/home/JETSON_USER",
+          "occurrences": 1
+        }
+      ],
+      "classification": "user_declared_project_code",
+      "license": "no_new_license_granted",
+      "verification": "bytes_and_static_only"
+    },
+    {
+      "public_path": "src/ps4-eye/ps4_depth_test.py",
+      "source_paths": [
+        "$PRIVATE/followup-20261018-134602/files/<JETSON_HOME>/ps4_depth_test.py"
+      ],
+      "original_sha256": "ae0bcdbdd4d5b1e49dd2a5a53c114472937caf5ae371a2e977d63673e7c6d598",
+      "public_sha256": "ae0bcdbdd4d5b1e49dd2a5a53c114472937caf5ae371a2e977d63673e7c6d598",
+      "original_bytes": 1669,
+      "public_bytes": 1669,
+      "preservation": "verbatim",
+      "redactions": [],
+      "classification": "user_declared_project_code",
+      "license": "no_new_license_granted",
+      "verification": "bytes_and_static_only"
+    },
+    {
+      "public_path": "src/ps4-eye/ps4_stream.py",
+      "source_paths": [
+        "$PRIVATE/followup-20261018-134602/files/<JETSON_HOME>/ps4_stream.py"
+      ],
+      "original_sha256": "4fbcf9f34bdb07f48f5c7835ec35ee1f808af430bbf0c67b6980e07d22e9f806",
+      "public_sha256": "4fbcf9f34bdb07f48f5c7835ec35ee1f808af430bbf0c67b6980e07d22e9f806",
+      "original_bytes": 6157,
+      "public_bytes": 6157,
+      "preservation": "verbatim",
+      "redactions": [],
+      "classification": "user_declared_project_code",
+      "license": "no_new_license_granted",
+      "verification": "bytes_and_static_only"
+    },
+    {
+      "public_path": "scripts/archive/preservation/backup-build-camera.sh",
+      "source_paths": [
+        "$V4/scripts/backup-build-camera.sh"
+      ],
+      "original_sha256": "70dea5385e694a447d99ae47d31997f88767623ead4402f050b057f2bf85aa74",
+      "public_sha256": "70dea5385e694a447d99ae47d31997f88767623ead4402f050b057f2bf85aa74",
+      "original_bytes": 6561,
+      "public_bytes": 6561,
+      "preservation": "verbatim",
+      "redactions": [],
+      "classification": "project_workflow_code",
+      "license": "no_new_license_granted",
+      "verification": "bytes_and_static_only"
+    },
+    {
+      "public_path": "scripts/archive/inventory/collect-extended.sh",
+      "source_paths": [
+        "$V4/scripts/collect-extended.sh"
+      ],
+      "original_sha256": "98801e4d3daa18fc97759765f26561dd9376633408a386bedc349b5110d87146",
+      "public_sha256": "98801e4d3daa18fc97759765f26561dd9376633408a386bedc349b5110d87146",
+      "original_bytes": 2673,
+      "public_bytes": 2673,
+      "preservation": "verbatim",
+      "redactions": [],
+      "classification": "project_workflow_code",
+      "license": "no_new_license_granted",
+      "verification": "bytes_and_static_only"
+    },
+    {
+      "public_path": "scripts/archive/preservation/export-source-changes.sh",
+      "source_paths": [
+        "$V4/scripts/export-source-changes.sh"
+      ],
+      "original_sha256": "de9106a40d15a3ad29bb6ec966ead938d5771ad54fa66af2368335d8716aff4c",
+      "public_sha256": "de9106a40d15a3ad29bb6ec966ead938d5771ad54fa66af2368335d8716aff4c",
+      "original_bytes": 1672,
+      "public_bytes": 1672,
+      "preservation": "verbatim",
+      "redactions": [],
+      "classification": "project_workflow_code",
+      "license": "no_new_license_granted",
+      "verification": "bytes_and_static_only"
+    },
+    {
+      "public_path": "scripts/archive/validation/verify.sh",
+      "source_paths": [
+        "$V4/scripts/verify.sh"
+      ],
+      "original_sha256": "7da3c9f682c6d7da82548de3869b6a9a46ca2dddbbf9a2e0194bd3cd3fe5bb15",
+      "public_sha256": "7da3c9f682c6d7da82548de3869b6a9a46ca2dddbbf9a2e0194bd3cd3fe5bb15",
+      "original_bytes": 909,
+      "public_bytes": 909,
+      "preservation": "verbatim",
+      "redactions": [],
+      "classification": "project_workflow_code",
+      "license": "no_new_license_granted",
+      "verification": "bytes_and_static_only"
+    },
+    {
+      "public_path": "scripts/archive/inventory/jetson_fetch.py",
+      "source_paths": [
+        "$PRIVATE/followup-20261018-134602/collection-tools/jetson_fetch.py"
+      ],
+      "original_sha256": "660e1ebbabf532ddd8720a37626a663b5d9ff0faa6d6d53b299a3bdfb4a3bd25",
+      "public_sha256": "deff6c6b45ab7c07d5b283d396dae7e57ea115c1cf4fd69295d266a41e41cb7e",
+      "original_bytes": 179591,
+      "public_bytes": 184331,
+      "preservation": "redacted",
+      "redactions": [
+        {
+          "kind": "machine_specific_home",
+          "placeholder": "/home/JETSON_USER",
+          "occurrences": 790
+        }
+      ],
+      "classification": "project_workflow_code",
+      "license": "no_new_license_granted",
+      "verification": "bytes_and_static_only"
+    },
+    {
+      "public_path": "scripts/archive/inventory/jetson_final_read.py",
+      "source_paths": [
+        "$PRIVATE/followup-20261018-134602/collection-tools/jetson_final_read.py"
+      ],
+      "original_sha256": "11d2ae30a514c36f4bc1856184c067ca43fc351e5deb72be704eac42c609bff5",
+      "public_sha256": "11d2ae30a514c36f4bc1856184c067ca43fc351e5deb72be704eac42c609bff5",
+      "original_bytes": 4620,
+      "public_bytes": 4620,
+      "preservation": "verbatim",
+      "redactions": [],
+      "classification": "project_workflow_code",
+      "license": "no_new_license_granted",
+      "verification": "bytes_and_static_only"
+    },
+    {
+      "public_path": "scripts/archive/inventory/jetson_readonly_discover.py",
+      "source_paths": [
+        "$PRIVATE/followup-20261018-134602/collection-tools/jetson_readonly_discover.py"
+      ],
+      "original_sha256": "b912865bd5bd6c0ab6b723aa5f9f6d05c30a1c0deb1d2a74caee8af3f48c5f27",
+      "public_sha256": "b912865bd5bd6c0ab6b723aa5f9f6d05c30a1c0deb1d2a74caee8af3f48c5f27",
+      "original_bytes": 4386,
+      "public_bytes": 4386,
+      "preservation": "verbatim",
+      "redactions": [],
+      "classification": "project_workflow_code",
+      "license": "no_new_license_granted",
+      "verification": "bytes_and_static_only"
+    },
+    {
+      "public_path": "scripts/archive/validation/cpu-runner.py",
+      "source_paths": [
+        "$PRIVATE/cpu-validation-20261018-140025/runner.py"
+      ],
+      "original_sha256": "49fa9726a324b77db87ef3cdab83074ae11d9f5767dcd12b010358970594766c",
+      "public_sha256": "49fa9726a324b77db87ef3cdab83074ae11d9f5767dcd12b010358970594766c",
+      "original_bytes": 3449,
+      "public_bytes": 3449,
+      "preservation": "verbatim",
+      "redactions": [],
+      "classification": "project_workflow_code",
+      "license": "no_new_license_granted",
+      "verification": "bytes_and_static_only"
+    },
+    {
+      "public_path": "patches/ps4-eye/ps4-stream-flask012.patch",
+      "source_paths": [
+        "$PRIVATE/followup-20261018-134602/proposed-compatibility/ps4_stream.py.patch"
+      ],
+      "original_sha256": "4695bb2b8b519d76d2ddd4d9694c374dd5dd49dea0773824d6eb1be35755cc10",
+      "public_sha256": "4695bb2b8b519d76d2ddd4d9694c374dd5dd49dea0773824d6eb1be35755cc10",
+      "original_bytes": 270,
+      "public_bytes": 270,
+      "preservation": "verbatim",
+      "classification": "unapplied_project_proposal",
+      "license": "no_new_license_granted",
+      "verification": "patch_application_static_only"
+    },
+    {
+      "public_path": "patches/ps4-eye/ps4-calib-python36.patch",
+      "source_paths": [
+        "$PRIVATE/followup-20261018-134602/proposed-compatibility/ps4_calib_capture.py.patch"
+      ],
+      "original_sha256": "88ccbae813073c986dcd7f4366135f3f34a7c7b1344963ae0e0bd8ef643b20c4",
+      "public_sha256": "88ccbae813073c986dcd7f4366135f3f34a7c7b1344963ae0e0bd8ef643b20c4",
+      "original_bytes": 477,
+      "public_bytes": 477,
+      "preservation": "verbatim",
+      "classification": "unapplied_project_proposal",
+      "license": "no_new_license_granted",
+      "verification": "patch_application_static_only"
+    },
+    {
+      "public_path": "patches/llama-cpu-legacy-neon-guard.patch",
+      "source_paths": [
+        "$PRIVATE/followup-20261018-134602/files/<JETSON_HOME>/robi-llm/llama.cpp/ggml/src/ggml-cpu/ggml-cpu-impl.h.bak"
+      ],
+      "original_sha256": "af1c3a87c9eacc9dbd62ecaefe7d83e5bae50f4c4da5c703e9dd8a6e2066b18c",
+      "public_sha256": "43dc15bc9d576958d23f1ec39f752926e71a5600ddcd43b5036bd0cf1cff323d",
+      "original_bytes": 13789,
+      "public_bytes": 325,
+      "preservation": "reconstructable_snapshot_patch",
+      "classification": "third_party_local_prototype",
+      "base_commit": "62df1815bc053066761f4eac58e288f23778e164",
+      "reconstructed_path": "ggml/src/ggml-cpu/ggml-cpu-impl.h",
+      "license": "MIT_base_notice_retained_local_additions_unassigned",
+      "verification": "must_reconstruct_exact_snapshot"
+    },
+    {
+      "public_path": "patches/ps4-eye/depth-stream-home-path.patch",
+      "source_paths": [
+        "generated: separate portability proposal against public src/ps4-eye/ps4_depth_stream.py"
+      ],
+      "original_sha256": null,
+      "public_sha256": "4a5ba52fdadf7a0e9f46410f71cbffb0c267b474e5747c50d3173dc747c88290",
+      "public_bytes": 437,
+      "preservation": "new_separate_proposal",
+      "classification": "unapplied_project_proposal",
+      "license": "no_new_license_granted",
+      "verification": "not_applied_to_preserved_src"
+    },
+    {
+      "public_path": "scripts/check-repo.py",
+      "source_paths": [
+        "git:5c63dd1:scripts/check-repo.py"
+      ],
+      "original_sha256": "82f49087d1dd0f5bc5a71113c2be0b03ee8c03bbb93c7a44c8de09ac337bb6df",
+      "public_sha256": "828bf8b2c118daf389030b061301f8c506f85a998d6054f1b4e044e63caf0117",
+      "original_bytes": 6052,
+      "public_bytes": 6719,
+      "preservation": "maintained_original_available_in_git",
+      "classification": "project_workflow_code",
+      "license": "no_new_license_granted",
+      "verification": "original_in_existing_git_history"
+    },
+    {
+      "public_path": "scripts/restore-llama.sh",
+      "source_paths": [
+        "git:5c63dd1:scripts/restore-llama.sh"
+      ],
+      "original_sha256": "bc3ce02fcc0336883f5134d11d9e99c7e4b235fb3d18a9e45c29257b5e9b3bb6",
+      "public_sha256": "bc3ce02fcc0336883f5134d11d9e99c7e4b235fb3d18a9e45c29257b5e9b3bb6",
+      "original_bytes": 1567,
+      "public_bytes": 1567,
+      "preservation": "maintained_original_available_in_git",
+      "classification": "project_workflow_code",
+      "license": "no_new_license_granted",
+      "verification": "original_in_existing_git_history"
+    },
+    {
+      "public_path": "scripts/restore-private-camera.py",
+      "source_paths": [
+        "git:5c63dd1:scripts/restore-private-camera.py"
+      ],
+      "original_sha256": "ef785aac6459948c13581d03e266ed2f9952d28ad63a556bdc9cc378df7aa3a5",
+      "public_sha256": "385e8a8c9f2e6c4475c7e4cdde9a2fe4a724424e76bcd3bea70465f3198c62b3",
+      "original_bytes": 4080,
+      "public_bytes": 4268,
+      "preservation": "maintained_original_available_in_git",
+      "classification": "project_workflow_code",
+      "license": "no_new_license_granted",
+      "verification": "original_in_existing_git_history"
+    },
+    {
+      "public_path": "scripts/cpu-smoke.py",
+      "source_paths": [
+        "git:5c63dd1:scripts/cpu-smoke.py"
+      ],
+      "original_sha256": "ceb38295b7d60a43a07e16e2ba132c11f38f4e2216569fc63d597405b15630ca",
+      "public_sha256": "ceb38295b7d60a43a07e16e2ba132c11f38f4e2216569fc63d597405b15630ca",
+      "original_bytes": 6063,
+      "public_bytes": 6063,
+      "preservation": "maintained_original_available_in_git",
+      "classification": "project_workflow_code",
+      "license": "no_new_license_granted",
+      "verification": "original_in_existing_git_history"
+    }
+  ]
+}

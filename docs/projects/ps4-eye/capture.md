@@ -8,35 +8,35 @@ YUYVは2画素で色差を共有するYUV4:2:2の並びです。コードはFOUR
 
 ## 前提と原コードの所在
 
-[firmware/USB](firmware.md)の工程を先に切り分けます。独自6本は非公開保全先のmanifestで管理し、包括的ライセンス未確認のため公開repoへコピーしません。必要なのはcv2、NumPy、Flaskと標準ライブラリで、独自6本はMatplotlibをimportしていません。
+[firmware/USB](firmware.md)の工程を先に切り分けます。独自6本は [src/ps4-eye](../../../src/ps4-eye/README.md) に全て配置し、原文を保持（1本は個人パス匿名化）しています。出典・license未設定の範囲は [棚卸し](../../../reference/code-inventory.md) を参照してください。必要なのはcv2、NumPy、Flaskと標準ライブラリで、独自6本はMatplotlibをimportしていません。
 
 | スクリプト | 役割 | 主な入力/出力 |
 |---|---|---|
-| ps4_stream.py | RGB配信 | port5000、/stream、/settings、/snapshot |
-| ps4_depth.py | 未校正の視差診断 | カレント先へdepth_*.jpg |
-| ps4_depth_test.py | 左右順の比較 | ホームへtest_*.jpg |
-| ps4_calib_capture.py | 左右同時の校正撮影 | port5002、/capture、camA/camB PNG |
-| ps4_calibrate.py | 校正パラメータ計算 | pairs → NPZ/preview |
-| ps4_depth_stream.py | 校正済み深度配信 | NPZ → port5001、比較/深度/overlay |
+| [ps4_stream.py](../../../src/ps4-eye/ps4_stream.py) | RGB配信 | port5000、/stream、/settings、/snapshot |
+| [ps4_depth.py](../../../src/ps4-eye/ps4_depth.py) | 未校正の視差診断 | カレント先へdepth_*.jpg |
+| [ps4_depth_test.py](../../../src/ps4-eye/ps4_depth_test.py) | 左右順の比較 | ホームへtest_*.jpg |
+| [ps4_calib_capture.py](../../../src/ps4-eye/ps4_calib_capture.py) | 左右同時の校正撮影 | port5002、/capture、camA/camB PNG |
+| [ps4_calibrate.py](../../../src/ps4-eye/ps4_calibrate.py) | 校正パラメータ計算 | pairs → NPZ/preview |
+| [ps4_depth_stream.py](../../../src/ps4-eye/ps4_depth_stream.py) | 校正済み深度配信 | NPZ → port5001、比較/深度/overlay |
 
 これらはホーム直下に追加された独自実装で、上流repoの追跡変更patchは空でした。上流viewerの編集と同じものではありません。
 
-## 原コードを新しい作業先へ復元
+## 保全コードを新しい作業先へ配置
 
-補助スクリプトは非公開manifestからカメラ6本、校正NPZ、25ペア、previewを選び、hashを確認して新規先へ配置します。元パスを知らなくてもsaved_asを根拠にします。公開repo内への出力や既存先への上書きは拒否します。
+公開用6本の用途・依存・実行方法・原文との違いは [src README](../../../src/ps4-eye/README.md) にまとめています。原文はsrcで固定し、次の新規作業コピーだけを実行/設定の対象にします。
 
 ```bash
 export CAMERA_STAGE="$LAB_WORK/camera-custom"
-python3 -B "$LAB_ROOT/scripts/restore-private-camera.py" \
-  --private-root "$PRIVATE_ROOT" --manifest "$RECOVERY/manifest.json" \
-  --dest "$CAMERA_STAGE"
+test ! -e "$CAMERA_STAGE" || exit 1
+mkdir -p "$CAMERA_STAGE"
+cp "$LAB_ROOT/src/ps4-eye/"*.py "$CAMERA_STAGE/"
 ```
 
-成功条件はスクリプト6本・NPZ・50枚が揃いhashが一致することです。失敗時は非公開資産の配置、manifestのroot、欠落ファイルを確認し、代わりの画像/校正値を生成しません。
+成功条件は6本の存在と公開版hash一致です。校正データは [深度の記事](stereo-depth.md) で別に復元します。原本/privateや公開srcを直接編集しません。
 
 ## 既存版とのAPI差を直す
 
-原文には二つの互換上の問題があり、別の提案patchとして非公開保全先にあります。
+原文には二つの互換上の問題があり、原文へ未適用の提案patchとして [patches/ps4-eye](../../../patches/README.md) にあります。
 
 | 箇所 | 原文 | 提案する変更 | 確認範囲 |
 |---|---|---|---|
@@ -45,11 +45,13 @@ python3 -B "$LAB_ROOT/scripts/restore-private-camera.py" \
 
 ```bash
 cd "$CAMERA_STAGE"
-git apply --check "$RECOVERY/proposed-compatibility/ps4_stream.py.patch"
-git apply --check "$RECOVERY/proposed-compatibility/ps4_calib_capture.py.patch"
-git apply "$RECOVERY/proposed-compatibility/ps4_stream.py.patch"
-git apply "$RECOVERY/proposed-compatibility/ps4_calib_capture.py.patch"
+git apply --check "$LAB_ROOT/patches/ps4-eye/ps4-stream-flask012.patch"
+git apply --check "$LAB_ROOT/patches/ps4-eye/ps4-calib-python36.patch"
+git apply "$LAB_ROOT/patches/ps4-eye/ps4-stream-flask012.patch"
+git apply "$LAB_ROOT/patches/ps4-eye/ps4-calib-python36.patch"
 ```
+
+深度配信のCALIBは公開用placeholderです。必要なら [Path.homeを使う任意patch](../../../patches/ps4-eye/depth-stream-home-path.patch) も作業コピーだけへ適用します。
 
 変更は復元した作業コピーだけへ適用します。この提案を過去に実機へ適用して動いたという事実はありません。依存版を上げたことにして原文の問題を隠しません。
 

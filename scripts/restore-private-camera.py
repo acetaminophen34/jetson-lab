@@ -24,6 +24,7 @@ def main():
     parser.add_argument('--private-root', required=True, type=Path)
     parser.add_argument('--manifest', required=True, type=Path)
     parser.add_argument('--dest', required=True, type=Path)
+    parser.add_argument('--assets-only', action='store_true', help='Restore calibration/images only; code is in src/ps4-eye')
     parser.add_argument('--check-only', action='store_true', help='Verify selection/hashes without copying')
     args = parser.parse_args()
     private = args.private_root.resolve()
@@ -38,7 +39,7 @@ def main():
         original = Path(record['path'])
         parts = original.parts
         relative = None
-        if len(parts) == 4 and parts[1] == 'home' and parts[-1] in SCRIPTS:
+        if not args.assets_only and len(parts) == 4 and parts[1] == 'home' and parts[-1] in SCRIPTS:
             relative = Path(parts[-1])
         elif original.name in {'stereo_calibration.npz', 'rectified_preview.jpg'} and original.parent.name == 'ps4_calib':
             relative = Path('ps4_calib') / original.name
@@ -54,7 +55,7 @@ def main():
         if source.stat().st_size != record['bytes'] or digest(source) != record['sha256']:
             parser.error('Asset hash/size mismatch: ' + str(relative))
         selected[relative] = (source, record)
-    required = {Path(name) for name in SCRIPTS} | {Path('ps4_calib/stereo_calibration.npz')}
+    required = ({Path(name) for name in SCRIPTS} if not args.assets_only else set()) | {Path('ps4_calib/stereo_calibration.npz')}
     if not required.issubset(selected):
         parser.error('Required scripts or calibration NPZ are missing')
     a = {x.name[5:] for x in selected if x.parent == Path('ps4_calib/pairs') and x.name.startswith('camA_')}

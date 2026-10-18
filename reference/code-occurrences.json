@@ -1,0 +1,460 @@
+{
+  "scope": "four_existing_local_source_roots",
+  "entries": [
+    {
+      "source": "$PRIVATE/cpu-validation-20261018-140025/runner.py",
+      "sha256": "49fa9726a324b77db87ef3cdab83074ae11d9f5767dcd12b010358970594766c",
+      "bytes": 3449,
+      "decision": "verbatim",
+      "public_path": "scripts/archive/validation/cpu-runner.py"
+    },
+    {
+      "source": "$PRIVATE/camera-source/trash.py",
+      "sha256": "606ee3b2874a79b47a5a1b94829032ee693e2b44ca85d56ff2deb197523259d9",
+      "bytes": 652,
+      "decision": "third_party_upstream_source",
+      "reason": "Tracked upstream file at fixed camera commit; no local diff, license unconfirmed"
+    },
+    {
+      "source": "$PRIVATE/camera-source/OpenCV_viewer/View_Depth.py",
+      "sha256": "6dc8a4de961dde942827d7b8a297270feef439eb2734b0d067240164a23e5b71",
+      "bytes": 4495,
+      "decision": "third_party_upstream_source",
+      "reason": "Tracked upstream file at fixed camera commit; no local diff, license unconfirmed"
+    },
+    {
+      "source": "$PRIVATE/camera-source/OpenCV_viewer/Get_Video.py",
+      "sha256": "794e294e721e89236d8f593a016b6ec3024b56e1f6cd374056931559e15d18fe",
+      "bytes": 1046,
+      "decision": "third_party_upstream_source",
+      "reason": "Tracked upstream file at fixed camera commit; no local diff, license unconfirmed"
+    },
+    {
+      "source": "$PRIVATE/camera-source/OpenCV_viewer/View_RGB.py",
+      "sha256": "5c78c97ddf61835bd198a5be793359f023da2c65247e161c78fb71c448796be7",
+      "bytes": 773,
+      "decision": "third_party_upstream_source",
+      "reason": "Tracked upstream file at fixed camera commit; no local diff, license unconfirmed"
+    },
+    {
+      "source": "$PRIVATE/camera-source/Calibration/TakeImages.py",
+      "sha256": "28b506680141a1fe93e5138f1e1e881562fad834768805ebd3d87a27337a4ef3",
+      "bytes": 893,
+      "decision": "third_party_upstream_source",
+      "reason": "Tracked upstream file at fixed camera commit; no local diff, license unconfirmed"
+    },
+    {
+      "source": "$PRIVATE/camera-source/Calibration/Calibrator.py",
+      "sha256": "9368163c1a88e6132de32666c4e14bbcd3cb655870a828005aafce2b2a3cbe69",
+      "bytes": 1202,
+      "decision": "third_party_upstream_source",
+      "reason": "Tracked upstream file at fixed camera commit; no local diff, license unconfirmed"
+    },
+    {
+      "source": "$PRIVATE/camera-source/Firmware_loader/ps4eye_init.py",
+      "sha256": "a257bfc12d14d7e71e15561abde1ad22db493629da917d1c4b4bc8f6284b0b27",
+      "bytes": 1451,
+      "decision": "third_party_upstream_source",
+      "reason": "Tracked upstream file at fixed camera commit; no local diff, license unconfirmed"
+    },
+    {
+      "source": "$PRIVATE/jetson-patches-source/patch/b4400/files/CMakeLists.txt",
+      "sha256": "1768a1712c6526d91c011b646d170d64f4609eb99b94dca7f5d0f81266351a5e",
+      "bytes": 7186,
+      "decision": "third_party_reference_source",
+      "reason": "Upstream replacement sources, not a locally authored whole project; original retained"
+    },
+    {
+      "source": "$PRIVATE/jetson-patches-source/patch/b4400/files/ggml/CMakeLists.txt",
+      "sha256": "4f784bf1d56493d7e13a2c9e2ba6d0dfa492405d0edc403ee8637b628d3e627e",
+      "bytes": 11358,
+      "decision": "third_party_reference_source",
+      "reason": "Upstream replacement sources, not a locally authored whole project; original retained"
+    },
+    {
+      "source": "$PRIVATE/jetson-patches-source/patch/b4400/files/ggml/src/ggml-cuda/common.cuh",
+      "sha256": "45f9db146a155466703a76de66a337ac5946fdf0e24a706bb3f4f9918be16d38",
+      "bytes": 23026,
+      "decision": "third_party_reference_source",
+      "reason": "Upstream replacement sources, not a locally authored whole project; original retained"
+    },
+    {
+      "source": "$PRIVATE/jetson-patches-source/patch/b4400/files/ggml/src/ggml-cuda/fattn-vec-f16.cuh",
+      "sha256": "b9c8a3a75b11a25ccd4f9b815d8617fb0f00e292b0e9fdefaadcdf53f00243b6",
+      "bytes": 17092,
+      "decision": "third_party_reference_source",
+      "reason": "Upstream replacement sources, not a locally authored whole project; original retained"
+    },
+    {
+      "source": "$PRIVATE/jetson-patches-source/patch/b4400/files/ggml/src/ggml-cuda/fattn-common.cuh",
+      "sha256": "7e38501b9ddb0825e9c6aee6f8657f3fddead652e9d28834e10a091e9ecb11e3",
+      "bytes": 24479,
+      "decision": "third_party_reference_source",
+      "reason": "Upstream replacement sources, not a locally authored whole project; original retained"
+    },
+    {
+      "source": "$PRIVATE/jetson-patches-source/patch/b4400/files/ggml/src/ggml-cuda/fattn-vec-f32.cuh",
+      "sha256": "1e1a72ec2ad851efc721dafba3d64fa9144b8241cc98814c82a33e5aa3eb6fe4",
+      "bytes": 16139,
+      "decision": "third_party_reference_source",
+      "reason": "Upstream replacement sources, not a locally authored whole project; original retained"
+    },
+    {
+      "source": "$PRIVATE/jetson-patches-source/patch/b1618/files/ggml-cuda.cu",
+      "sha256": "7f1392bd926738f584f319bf2e542babcc9b461fb3beb65ff4e670cab282b2b0",
+      "bytes": 496519,
+      "decision": "third_party_reference_source",
+      "reason": "Upstream replacement sources, not a locally authored whole project; original retained"
+    },
+    {
+      "source": "$PRIVATE/jetson-patches-source/patch/b2275/files/Makefile",
+      "sha256": "757811bbc6a038e687b42ecd283edd8a60c1977ece273161421c03294f06db1e",
+      "bytes": 24993,
+      "decision": "third_party_reference_source",
+      "reason": "Upstream replacement sources, not a locally authored whole project; original retained"
+    },
+    {
+      "source": "$PRIVATE/jetson-patches-source/patch/b5050/files/CMakeLists.txt",
+      "sha256": "21b4ea4bc323f3cc3c0c70efeeea00536260769bf0a5447584af9cccd4a7a3fb",
+      "bytes": 7511,
+      "decision": "third_party_reference_source",
+      "reason": "Upstream replacement sources, not a locally authored whole project; original retained"
+    },
+    {
+      "source": "$PRIVATE/jetson-patches-source/patch/b5050/files/cuda_bf16.hpp",
+      "sha256": "7edeec767d7373d10f37521bcbb66e2c2cd39abcda695cc8f295d12eea2c8af4",
+      "bytes": 412,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/compat-headers/cuda_bf16.hpp"
+    },
+    {
+      "source": "$PRIVATE/jetson-patches-source/patch/b5050/files/cuda_bf16.h",
+      "sha256": "bfe47be09ef61153bea805be2c8121e47cd400686ac40a396e373679ebbe8490",
+      "bytes": 144,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/compat-headers/cuda_bf16.h"
+    },
+    {
+      "source": "$PRIVATE/jetson-patches-source/patch/b5050/files/ggml/CMakeLists.txt",
+      "sha256": "2126112192be18eb954401b6ed644bc88d9abbb27835f9d33630f4a63d24842e",
+      "bytes": 15002,
+      "decision": "third_party_reference_source",
+      "reason": "Upstream replacement sources, not a locally authored whole project; original retained"
+    },
+    {
+      "source": "$PRIVATE/jetson-patches-source/patch/b5050/files/ggml/src/ggml-cuda/common.cuh",
+      "sha256": "c3770fcc9d848d0322b7b07825affec256c935bc8435a620ede77f4cc6cd2b3a",
+      "bytes": 28631,
+      "decision": "third_party_reference_source",
+      "reason": "Upstream replacement sources, not a locally authored whole project; original retained"
+    },
+    {
+      "source": "$PRIVATE/jetson-patches-source/patch/b5050/files/ggml/src/ggml-cuda/fattn-vec-f16.cuh",
+      "sha256": "853b54ea6f2a489dd4635b1aa1b464b271ddf2d7029dad0b41b9169c75d302e2",
+      "bytes": 16786,
+      "decision": "third_party_reference_source",
+      "reason": "Upstream replacement sources, not a locally authored whole project; original retained"
+    },
+    {
+      "source": "$PRIVATE/jetson-patches-source/patch/b5050/files/ggml/src/ggml-cuda/fattn-common.cuh",
+      "sha256": "dd8955f4258dc2a05fe369d84f5ccc4fef79b9b70799e7ee1e8405168b06f56d",
+      "bytes": 31718,
+      "decision": "third_party_reference_source",
+      "reason": "Upstream replacement sources, not a locally authored whole project; original retained"
+    },
+    {
+      "source": "$PRIVATE/jetson-patches-source/patch/b5050/files/ggml/src/ggml-cuda/fattn-vec-f32.cuh",
+      "sha256": "9bd4d5c0aca774a63b053ce9db05c4359d8b3d82816a50fcd5a2370fdbd76874",
+      "bytes": 15828,
+      "decision": "third_party_reference_source",
+      "reason": "Upstream replacement sources, not a locally authored whole project; original retained"
+    },
+    {
+      "source": "$PRIVATE/collected/repos/llama5050gpu/tracked-changes.patch",
+      "sha256": "f1c6a15c487064f952e37b1d162bc66b6108400c2da5da022ecdea2f1291e9bb",
+      "bytes": 4251,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/llama5050gpu.patch"
+    },
+    {
+      "source": "$PRIVATE/collected/repos/llama5050gpu/untracked/cuda_bf16.hpp",
+      "sha256": "7edeec767d7373d10f37521bcbb66e2c2cd39abcda695cc8f295d12eea2c8af4",
+      "bytes": 412,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/compat-headers/cuda_bf16.hpp"
+    },
+    {
+      "source": "$PRIVATE/collected/repos/llama5050gpu/untracked/cuda_bf16.h",
+      "sha256": "bfe47be09ef61153bea805be2c8121e47cd400686ac40a396e373679ebbe8490",
+      "bytes": 144,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/compat-headers/cuda_bf16.h"
+    },
+    {
+      "source": "$PRIVATE/collected/repos/ps4-camera/tracked-changes.patch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "decision": "no_changes_empty_patch",
+      "reason": "No source change bytes to publish; original empty diff kept"
+    },
+    {
+      "source": "$PRIVATE/collected/repos/jetson-patches/tracked-changes.patch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "decision": "no_changes_empty_patch",
+      "reason": "No source change bytes to publish; original empty diff kept"
+    },
+    {
+      "source": "$PRIVATE/collected/repos/llama/tracked-changes.patch",
+      "sha256": "086a7f4887df6054cf3a73ac610feadb5e279f9d21218675d2bf555aa543f9b1",
+      "bytes": 17300,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/llama.patch"
+    },
+    {
+      "source": "$PRIVATE/followup-20261018-134602/collection-tools/jetson_fetch.py",
+      "sha256": "660e1ebbabf532ddd8720a37626a663b5d9ff0faa6d6d53b299a3bdfb4a3bd25",
+      "bytes": 179591,
+      "decision": "redacted",
+      "public_path": "scripts/archive/inventory/jetson_fetch.py"
+    },
+    {
+      "source": "$PRIVATE/followup-20261018-134602/collection-tools/jetson_readonly_discover.py",
+      "sha256": "b912865bd5bd6c0ab6b723aa5f9f6d05c30a1c0deb1d2a74caee8af3f48c5f27",
+      "bytes": 4386,
+      "decision": "verbatim",
+      "public_path": "scripts/archive/inventory/jetson_readonly_discover.py"
+    },
+    {
+      "source": "$PRIVATE/followup-20261018-134602/collection-tools/jetson_final_read.py",
+      "sha256": "11d2ae30a514c36f4bc1856184c067ca43fc351e5deb72be704eac42c609bff5",
+      "bytes": 4620,
+      "decision": "verbatim",
+      "public_path": "scripts/archive/inventory/jetson_final_read.py"
+    },
+    {
+      "source": "$PRIVATE/followup-20261018-134602/diffs/llama.cpp.patch",
+      "sha256": "086a7f4887df6054cf3a73ac610feadb5e279f9d21218675d2bf555aa543f9b1",
+      "bytes": 17300,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/llama.patch"
+    },
+    {
+      "source": "$PRIVATE/followup-20261018-134602/diffs/llama5050gpu.cpp.patch",
+      "sha256": "f1c6a15c487064f952e37b1d162bc66b6108400c2da5da022ecdea2f1291e9bb",
+      "bytes": 4251,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/llama5050gpu.patch"
+    },
+    {
+      "source": "$PRIVATE/followup-20261018-134602/diffs/llama-qwen3-gpu.patch",
+      "sha256": "d0879c83f287bd89d2de2a8744ae0ca6aac5cd82b46030431cf47a320b816553",
+      "bytes": 8650,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/llama-qwen3-gpu.patch"
+    },
+    {
+      "source": "$PRIVATE/followup-20261018-134602/files/<JETSON_HOME>/ps4_calibrate.py",
+      "sha256": "5bfbb7333a28dbce9b57385b1d46aa423161f8db5d04149660589152e679bbe1",
+      "bytes": 4732,
+      "decision": "verbatim",
+      "public_path": "src/ps4-eye/ps4_calibrate.py"
+    },
+    {
+      "source": "$PRIVATE/followup-20261018-134602/files/<JETSON_HOME>/ps4_depth_test.py",
+      "sha256": "ae0bcdbdd4d5b1e49dd2a5a53c114472937caf5ae371a2e977d63673e7c6d598",
+      "bytes": 1669,
+      "decision": "verbatim",
+      "public_path": "src/ps4-eye/ps4_depth_test.py"
+    },
+    {
+      "source": "$PRIVATE/followup-20261018-134602/files/<JETSON_HOME>/ps4_depth_stream.py",
+      "sha256": "da7abafbd7ff8eb017d08c628968fa13f75f652cb43c07c791378dd27642740f",
+      "bytes": 9094,
+      "decision": "redacted",
+      "public_path": "src/ps4-eye/ps4_depth_stream.py"
+    },
+    {
+      "source": "$PRIVATE/followup-20261018-134602/files/<JETSON_HOME>/ps4_calib_capture.py",
+      "sha256": "d66fe414bc0357005860308a865d3c0d02a68fb45473bd82fcce77f55b18b80a",
+      "bytes": 6732,
+      "decision": "verbatim",
+      "public_path": "src/ps4-eye/ps4_calib_capture.py"
+    },
+    {
+      "source": "$PRIVATE/followup-20261018-134602/files/<JETSON_HOME>/ps4_stream.py",
+      "sha256": "4fbcf9f34bdb07f48f5c7835ec35ee1f808af430bbf0c67b6980e07d22e9f806",
+      "bytes": 6157,
+      "decision": "verbatim",
+      "public_path": "src/ps4-eye/ps4_stream.py"
+    },
+    {
+      "source": "$PRIVATE/followup-20261018-134602/files/<JETSON_HOME>/ps4_depth.py",
+      "sha256": "b4dcc1e2c630c975dd9189cb580b06f253ce5c11123e9ce300e41787e56a3095",
+      "bytes": 1962,
+      "decision": "verbatim",
+      "public_path": "src/ps4-eye/ps4_depth.py"
+    },
+    {
+      "source": "$PRIVATE/followup-20261018-134602/files/<JETSON_HOME>/robi-llm/llama.cpp/tools/server/server-schema.cpp.bak",
+      "sha256": "1f9d7b73b4363b90b08de0360b0a5ce0b3d152750bfb8d587a367e90c7904050",
+      "bytes": 29572,
+      "decision": "third_party_HEAD_identical_snapshot",
+      "reason": "Matches fixed CPU HEAD; full original remains private, no unique local edit"
+    },
+    {
+      "source": "$PRIVATE/followup-20261018-134602/files/<JETSON_HOME>/robi-llm/llama.cpp/tools/cli/CMakeLists.txt.bak",
+      "sha256": "6094ef7727f29dc18d88765611a6771deb083f9e3acf3b5d18eca8706349c5a7",
+      "bytes": 772,
+      "decision": "third_party_HEAD_identical_snapshot",
+      "reason": "Matches fixed CPU HEAD; full original remains private, no unique local edit"
+    },
+    {
+      "source": "$PRIVATE/followup-20261018-134602/files/<JETSON_HOME>/robi-llm/llama.cpp/ggml/src/ggml-cpu/ggml-cpu-impl.h.bak",
+      "sha256": "af1c3a87c9eacc9dbd62ecaefe7d83e5bae50f4c4da5c703e9dd8a6e2066b18c",
+      "bytes": 13789,
+      "decision": "reconstructable_snapshot_patch",
+      "public_path": "patches/llama-cpu-legacy-neon-guard.patch"
+    },
+    {
+      "source": "$PRIVATE/followup-20261018-134602/proposed-compatibility/ps4_calib_capture.py.patch",
+      "sha256": "88ccbae813073c986dcd7f4366135f3f34a7c7b1344963ae0e0bd8ef643b20c4",
+      "bytes": 477,
+      "decision": "verbatim",
+      "public_path": "patches/ps4-eye/ps4-calib-python36.patch"
+    },
+    {
+      "source": "$PRIVATE/followup-20261018-134602/proposed-compatibility/ps4_stream.py.patch",
+      "sha256": "4695bb2b8b519d76d2ddd4d9694c374dd5dd49dea0773824d6eb1be35755cc10",
+      "bytes": 270,
+      "decision": "verbatim",
+      "public_path": "patches/ps4-eye/ps4-stream-flask012.patch"
+    },
+    {
+      "source": "$OLD_DOCS/patches/llama-qwen3-gpu.patch",
+      "sha256": "d0879c83f287bd89d2de2a8744ae0ca6aac5cd82b46030431cf47a320b816553",
+      "bytes": 8650,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/llama-qwen3-gpu.patch"
+    },
+    {
+      "source": "$OLD_DOCS/patches/llama5050gpu.patch",
+      "sha256": "f1c6a15c487064f952e37b1d162bc66b6108400c2da5da022ecdea2f1291e9bb",
+      "bytes": 4251,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/llama5050gpu.patch"
+    },
+    {
+      "source": "$OLD_DOCS/patches/llama.patch",
+      "sha256": "086a7f4887df6054cf3a73ac610feadb5e279f9d21218675d2bf555aa543f9b1",
+      "bytes": 17300,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/llama.patch"
+    },
+    {
+      "source": "$OLD_DOCS/assets/llama5050gpu/cuda_bf16.hpp",
+      "sha256": "7edeec767d7373d10f37521bcbb66e2c2cd39abcda695cc8f295d12eea2c8af4",
+      "bytes": 412,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/compat-headers/cuda_bf16.hpp"
+    },
+    {
+      "source": "$OLD_DOCS/assets/llama5050gpu/cuda_bf16.h",
+      "sha256": "bfe47be09ef61153bea805be2c8121e47cd400686ac40a396e373679ebbe8490",
+      "bytes": 144,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/compat-headers/cuda_bf16.h"
+    },
+    {
+      "source": "$OLD_DOCS/assets/llama-backups/tools/server/server-schema.cpp.bak",
+      "sha256": "1f9d7b73b4363b90b08de0360b0a5ce0b3d152750bfb8d587a367e90c7904050",
+      "bytes": 29572,
+      "decision": "third_party_HEAD_identical_snapshot",
+      "reason": "Matches fixed CPU HEAD; full original remains private, no unique local edit"
+    },
+    {
+      "source": "$OLD_DOCS/assets/llama-backups/tools/cli/CMakeLists.txt.bak",
+      "sha256": "6094ef7727f29dc18d88765611a6771deb083f9e3acf3b5d18eca8706349c5a7",
+      "bytes": 772,
+      "decision": "third_party_HEAD_identical_snapshot",
+      "reason": "Matches fixed CPU HEAD; full original remains private, no unique local edit"
+    },
+    {
+      "source": "$OLD_DOCS/assets/llama-backups/ggml/src/ggml-cpu/ggml-cpu-impl.h.bak",
+      "sha256": "af1c3a87c9eacc9dbd62ecaefe7d83e5bae50f4c4da5c703e9dd8a6e2066b18c",
+      "bytes": 13789,
+      "decision": "reconstructable_snapshot_patch",
+      "public_path": "patches/llama-cpu-legacy-neon-guard.patch"
+    },
+    {
+      "source": "$V4/scripts/backup-build-camera.sh",
+      "sha256": "70dea5385e694a447d99ae47d31997f88767623ead4402f050b057f2bf85aa74",
+      "bytes": 6561,
+      "decision": "verbatim",
+      "public_path": "scripts/archive/preservation/backup-build-camera.sh"
+    },
+    {
+      "source": "$V4/scripts/verify.sh",
+      "sha256": "7da3c9f682c6d7da82548de3869b6a9a46ca2dddbbf9a2e0194bd3cd3fe5bb15",
+      "bytes": 909,
+      "decision": "verbatim",
+      "public_path": "scripts/archive/validation/verify.sh"
+    },
+    {
+      "source": "$V4/scripts/export-source-changes.sh",
+      "sha256": "de9106a40d15a3ad29bb6ec966ead938d5771ad54fa66af2368335d8716aff4c",
+      "bytes": 1672,
+      "decision": "verbatim",
+      "public_path": "scripts/archive/preservation/export-source-changes.sh"
+    },
+    {
+      "source": "$V4/scripts/collect-extended.sh",
+      "sha256": "98801e4d3daa18fc97759765f26561dd9376633408a386bedc349b5110d87146",
+      "bytes": 2673,
+      "decision": "verbatim",
+      "public_path": "scripts/archive/inventory/collect-extended.sh"
+    },
+    {
+      "source": "$PRESERVATION/repos/llama5050gpu/tracked-changes.patch",
+      "sha256": "f1c6a15c487064f952e37b1d162bc66b6108400c2da5da022ecdea2f1291e9bb",
+      "bytes": 4251,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/llama5050gpu.patch"
+    },
+    {
+      "source": "$PRESERVATION/repos/llama5050gpu/untracked/cuda_bf16.hpp",
+      "sha256": "7edeec767d7373d10f37521bcbb66e2c2cd39abcda695cc8f295d12eea2c8af4",
+      "bytes": 412,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/compat-headers/cuda_bf16.hpp"
+    },
+    {
+      "source": "$PRESERVATION/repos/llama5050gpu/untracked/cuda_bf16.h",
+      "sha256": "bfe47be09ef61153bea805be2c8121e47cd400686ac40a396e373679ebbe8490",
+      "bytes": 144,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/compat-headers/cuda_bf16.h"
+    },
+    {
+      "source": "$PRESERVATION/repos/ps4-camera/tracked-changes.patch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "decision": "no_changes_empty_patch",
+      "reason": "No source change bytes to publish; original empty diff kept"
+    },
+    {
+      "source": "$PRESERVATION/repos/jetson-patches/tracked-changes.patch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "decision": "no_changes_empty_patch",
+      "reason": "No source change bytes to publish; original empty diff kept"
+    },
+    {
+      "source": "$PRESERVATION/repos/llama/tracked-changes.patch",
+      "sha256": "086a7f4887df6054cf3a73ac610feadb5e279f9d21218675d2bf555aa543f9b1",
+      "bytes": 17300,
+      "decision": "retained_existing_patch_or_header",
+      "public_path": "patches/llama.patch"
+    }
+  ]
+}

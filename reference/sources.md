@@ -4,7 +4,7 @@
 
 このrepoは、既存の`jetson-rebuild`、非公開回収資産、既存調査を再編集したものです。元資料を削除/上書きせず、新規Gitリポジトリへ必要な公開対象だけを入れています。調査の時系列ではなく、各技術の説明と実行手順を正本にしました。
 
-元の公開候補41ファイルの相対名/サイズ/SHA-256を [source-index.json](source-index.json) に記録しています。これは入力資料との対応で、元の古い文章を正しい現状として再掲載するものではありません。カメラ原文や個人の履歴はこのindexにも入れていません。
+元の公開候補41ファイルの相対名/サイズ/SHA-256を [source-index.json](source-index.json) に記録しています。これは入力資料との対応で、元の古い文章を正しい現状として再掲載するものではありません。この過去入力indexは維持し、今回のコード原本出現は [code-occurrences.json](code-occurrences.json) に追加管理しています。個人の全履歴は含めません。
 
 ## 一次資料
 
@@ -26,7 +26,7 @@ CMakeCache/compile_commands/link.txt、CUDA依存ファイル、ELFの存在とh
 
 ### S5
 
-独自PS4スクリプト6本、校正NPZ、校正入力25ペア、preview、Python関数signature。原文は非公開`followup-20261018-134602/files/`。元コードの意味、数値配列の静的解析、保存依存版とのAPI差を記事へ反映しました。コード/firmwareの許諾が未確定なので本文一式やバイナリは公開しません。
+独自PS4スクリプト6本、校正NPZ、校正入力25ペア、preview、Python関数signature。原文は非公開`followup-20261018-134602/files/`。元コードの意味、数値配列の静的解析、保存依存版とのAPI差を記事へ反映しました。今回のユーザー指示で自作コード6本を [src](../src/ps4-eye/README.md) へ保全しました。第三者上流のコード一式とfirmwareの許諾は別であり、バイナリとともに転載しません。固定個人パスの公開用置換は [code-origins.json](code-origins.json) で区別します。
 
 ### S6
 
@@ -51,7 +51,8 @@ systemd/udev/modprobe/modules-loadの保存設定と一覧。jtopはAGPL記載�
 | カメラ解析・復元手順 | ps4-eyeの4記事 |
 | 調査報告・追加更新・検証 | 検証結果へ統合。古い「未収集」表現は現在の回収状態へ更新 |
 | 長いcache/link/hash一覧 | reference/detailsに隔離 |
-| .bak・画像・校正実体・独自原コード | 既存保全先に維持し新repoへ含めない |
+| 独自原コード・試作・旧補助スクリプト | src/scripts/patchesへ用途別に保全。原文/匿名化/復元差分をhashで区別 |
+| 画像・校正実体・外部原文の重複 | 既存非公開保全先に維持 |
 
 初回67件の [指紋一覧](details/backup-inventory.md)、追加回収/実行証跡の [指紋一覧](details/recovery-manifest.md) も参照できます。これらは画像やfirmwareの実体ではありません。
 
@@ -59,8 +60,8 @@ systemd/udev/modprobe/modules-loadの保存設定と一覧。jtopはAGPL記載�
 
 - 第三者MIT通知は`licenses/`に元バイトのまま保存。由来範囲は [LICENSE](../LICENSE) を参照。
 - 独自文書・スクリプト・修正追加部分へ包括ライセンスを勝手に付与していません。所有者の判断前は再配布許諾未設定です。
-- 独自カメラコード、firmware、モデル、校正値バイナリ、画像、鍵/トークン/認証設定、巨大bundle、build本体をGitへ入れません。
-- 原コードが必要なカメラ記事は非公開保全資産を使う手順です。公開repoだけで完結すると誤認させません。
+- 自作カメラコードは保全指示に基づきsrcへ置き、第三者の上流プロジェクト一式は含めません。firmware、モデル、校正値バイナリ、画像、鍵/トークン/認証設定、巨大bundle、build本体をGitへ入れません。
+- 自作コードは公開repoにありますが、firmware/校正/画像は非公開資産です。撮影まで公開repoだけで完結すると誤認させません。
 
 ## 継続編集とGitHub
 
@@ -92,3 +93,7 @@ git diff --cached
 - [CMake 3.28コマンド文書](https://cmake.org/cmake/help/v3.28/manual/cmake.1.html)
 - [llama.cpp](https://github.com/ggml-org/llama.cpp)、[Jetson向け参照patch](https://github.com/kreier/llama.cpp-jetson)
 - [PS4 Eye上流コード](https://github.com/sieuwe1/PS4-eye-camera-for-linux-with-python-and-OpenCV)、[OpenCV文書](https://docs.opencv.org/)、[PyUSB](https://github.com/pyusb/pyusb)
+
+## コード一体管理への更新
+
+[棚卸し](code-inventory.md) で取得済みコード65出現を全分類し、自作/作業ソース14本、試作スナップショット1件、既存互換案2件を追加しました。原本絶対パスと原文固定コピーはpublication-reviewの非公開記録に保存。公開版で固定ホーム2ファイルだけを匿名化しています。新しいライセンス付与やGitHub pushは行っていません。

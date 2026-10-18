@@ -8,7 +8,7 @@
 
 ## 校正ファイルの意味
 
-独自校正は`~/ps4_calib/stereo_calibration.npz`にあります。上流同梱の単眼param_*.npyとは別物です。
+[独自校正コード](../../../src/ps4-eye/ps4_calibrate.py) の出力は`~/ps4_calib/stereo_calibration.npz`です。上流同梱の単眼param_*.npyとは別物です。
 
 | 保存値 | 意味 |
 |---|---|
@@ -24,15 +24,19 @@
 
 ## 前提と校正資産の復元
 
-[撮影コード復元](capture.md)の補助スクリプトで`CAMERA_STAGE/ps4_calib/`にNPZ、50枚のPNG、previewを配置済みとします。新しいホーム先だけへ戻します。
+[撮影コード](../../../src/ps4-eye/README.md) と校正データは分けて復元します。補助スクリプトの--assets-onlyでNPZ、50枚PNG、previewだけを新規作業先へ取り出し、原文hashを照合します。
 
 ```bash
+export CAMERA_ASSETS="$LAB_WORK/camera-assets"
+python3 -B "$LAB_ROOT/scripts/restore-private-camera.py" \
+  --private-root "$PRIVATE_ROOT" --manifest "$RECOVERY/manifest.json" \
+  --dest "$CAMERA_ASSETS" --assets-only
 test ! -e "$HOME/ps4_calib" || exit 1
-cp -R "$CAMERA_STAGE/ps4_calib" "$HOME/ps4_calib"
+cp -R "$CAMERA_ASSETS/ps4_calib" "$HOME/ps4_calib"
 printf '%s  %s\n' e3dd00dab470d03cbddaa9af18bc5117777919291a0c6e333d322dfd24f7b9ce "$HOME/ps4_calib/stereo_calibration.npz" | sha256sum -c -
 ```
 
-NPZは3,610bytesです。成功はhashと元画像の揃いで判定します。コードは元ユーザーの絶対ホームパスにあるNPZを指定しているため、ユーザー名が変わる場合はdepth_streamのCALIB行を作業コピーだけで修正しdiffを記録してください。HOME変数を別用途へ付け替える必要はありません。
+NPZは3,610bytesです。成功はhashと元画像の揃いで判定します。[配信の保全コード](../../../src/ps4-eye/ps4_depth_stream.py) は個人パスをplaceholderに置換しています。作業コピーでCALIBを設定するか [Path.homeの任意案](../../../patches/ps4-eye/depth-stream-home-path.patch) を適用してください。元の固定パス原文は非公開のままです。HOME変数を別用途へ付け替える必要はありません。
 
 ## 深度処理の順序と左右の向き
 
