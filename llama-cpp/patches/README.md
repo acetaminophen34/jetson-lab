@@ -1,4 +1,4 @@
-# Nano向けのソース修正
+# llama.cppの互換修正
 
 | 構成 | ベースcommit | patch |
 |---|---|---|

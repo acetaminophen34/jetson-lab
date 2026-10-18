@@ -51,55 +51,15 @@ df -h /
 free -h
 ```
 
-有線LANまたはWi-FiでMacと同じネットワークへ接続し、NanoのIPを確認します。
+有線LANまたはWi-FiでMacと同じネットワークへ接続します。
+
+## 5. SDKが不足している場合
+
+[JetPack4.6.1](https://developer.nvidia.com/embedded/jetpack-sdk-461) のパッケージを追加します。既にCUDA・OpenCV等が入っていれば不要です。
 
 ```bash
-hostname -I
-ip route
+apt-cache policy nvidia-jetpack cuda-toolkit-10-2 libcudnn8 tensorrt libopencv
+sudo apt install --no-upgrade nvidia-jetpack=4.6.1-b110
 ```
 
-## 5. Nano：SSHを有効にする
-
-openssh-serverが入っているか確認し、無い場合だけ導入します。
-
-```bash
-dpkg-query -W openssh-server
-```
-
-```bash
-sudo apt update
-sudo apt install --no-upgrade openssh-server
-```
-
-SSHを起動し、active (running)になっていることを確認します。
-
-```bash
-sudo systemctl enable --now ssh
-sudo systemctl status ssh
-hostname -I
-```
-
-## 6. Mac：SSHで接続する
-
-初回設定のユーザー名と、Nanoで確認したIPを指定します。
-
-```text
-ssh <username>@<jetson-ip>
-```
-
-実機の例です。192.168.100.6は固定の初期アドレスではありません。
-
-```bash
-ssh a62ss@192.168.100.6
-```
-
-Ubuntuのパスワードでログインしたら、[基本環境](packages.md) の設定へ進みます。
-
-## 7. ディスプレイなしで使う
-
-SSH接続を確認したらNanoを終了し、電源を外してディスプレイ・キーボード・マウスを外します。LANと電源を接続して起動し、Macから再接続します。
-
-```bash
-# Nano側
-sudo poweroff
-```
+次へ：[共通のSSH設定・開発ツール](packages.md)。

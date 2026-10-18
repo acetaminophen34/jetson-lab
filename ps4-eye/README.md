@@ -1,6 +1,6 @@
 # PS4 Eyeで撮影・配信する
 
-firmwareロード、OpenCVでの画像取得・保存、Safariへの配信、人物と背景の相対視差表示まで動作しました。初期化後の再構築は未検証です。
+firmwareロード、OpenCVでの画像取得・保存、Safariへの配信、人物と背景の相対視差表示まで動作しました。
 
 ## 1. ライブラリを入れる
 
@@ -61,7 +61,7 @@ v4l2-ctl -d /dev/video0 --list-ctrls-menus
 
 ## 5. 自作コードを配置する
 
-6本を作業先へコピーします。互換patchはFlaskのsnapshot引数、Python3.6のunlink、校正ファイルのホームパスを修正する案です（実機適用は未検証）。
+6本を作業先へコピーします。互換patchはFlaskのsnapshot引数、Python3.6のunlink、校正ファイルのホームパスを修正する互換案です（未検証）。
 
 ```bash
 mkdir ~/jetson-work/ps4-eye-custom
