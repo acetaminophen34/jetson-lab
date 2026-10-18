@@ -6,4 +6,4 @@ TX2の実機環境は未調査です。このリポジトリで動作を確認�
 
 PS4 EyeではUSBトポロジ、V4L2ノード、入力formatも実機で確認します。校正値はボードの機種よりもカメラ個体・解像度・切り出し・左右順に依存します。
 
-[Nanoの基本環境](nano.md)、[CPU構築](../llama-cpp/cpu.md)、[GPU構築](../llama-cpp/gpu.md)を参照し、TX2で確認した条件を独立して追記してください。
+[Nanoの基本環境](nano.md)、[CPU構築](../llama-cpp/README.md)、[GPU構築](../llama-cpp/gpu.md)を参照し、TX2で確認した条件を独立して追記してください。

@@ -1,21 +1,18 @@
-# Jetson Lab
+# Jetson Nanoの構築メモ
 
-Jetsonで作ったプログラムと、環境を作り直すための手順をまとめています。説明・ソースコード・修正パッチをプロジェクトごとに管理します。
+Jetson Nanoでllama.cppとPS4 Eyeを使うためのメモです。短い説明と、ターミナルへ入力するコマンドを順番に載せています。
 
-## 使用環境
-
-Jetson Nano（aarch64、RAM約4GB）、Ubuntu18.04.6、L4T32.7.1、CUDA10.2。再構築の目標はJetPack4.6.1です。TX2は移植先の候補で、実機検証はしていません。
-
-## 開発したもの
-
-| プロジェクト | 内容 |
+| 対象 | 内容 |
 |---|---|
-| [llama.cpp / Qwen3](llama-cpp/README.md) | 古いGCC/CUDAへの互換修正、CPU推論、GPUビルド手順。CPUで3.8 tokens/sを確認 |
-| [PS4 Eye](ps4-eye/README.md) | RGB配信、左右画像の切り出し、ステレオ校正、視差・深度処理。映像取得は未検証 |
-| [補助ツール](tools/README.md) | 校正データの復元、環境確認、保全・調査に使用したスクリプト |
+| [Nanoの準備](setup/nano.md) | JetPack4.6.1、Ubuntu18.04、CUDA10.2 |
+| [GCC・CMake](setup/packages.md) | GCC/G++8.4.0、CMake3.28.6の導入 |
+| [llama.cpp](llama-cpp/README.md) | ソース取得、Nano用patch、CPUビルド、Qwen3推論 |
+| [GPU版](llama-cpp/gpu.md) | CUDA10.2用patchと追加ビルド手順 |
+| [PS4 Eye](ps4-eye/README.md) | firmwareロード、RGB配信、自作Python6本 |
+| [校正・距離計算](ps4-eye/calibration.md) | 校正撮影、NPZ、視差から深度を求める処理 |
 
-## 環境を再構築する
+実機はNano（aarch64、RAM約4GB）です。過去会話から復元した履歴では、10月14日にQwen3のCPUベンチマークで4スレッド5.62 t/s、10月15日にPS4 Eyeの撮影・Safari配信・相対視差表示に成功していました。後日の2スレッド3.8 tokens/sは別測定です。
 
-[Nanoの準備](setup/nano.md) → [パッケージ・コンパイラ](setup/packages.md) → [CPU版LLM](llama-cpp/cpu.md) → [カメラ](ps4-eye/README.md) → [GPU版（任意）](llama-cpp/gpu.md)。
+カメラは現在再検証しておらず、校正済み絶対距離精度は未確認です。クリーンビルド・GPU安定動作・[TX2への適用](setup/tx2.md)も未検証です。
 
-TX2については [適用範囲](setup/tx2.md) を確認してください。
+作業用の例は `~/jetson-work`、この記事とpatchは `~/Projects/jetson-lab` に置きます。別の場所を使う場合はコマンド内のパスを読み替えてください。掲載した取得・構築コマンドは既存設定から整理した未検証の手順であり、過去の端末履歴をそのまま再録したものではありません。
