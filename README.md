@@ -4,8 +4,8 @@ Jetson Nanoでllama.cppとPS4 Eyeを使うためのメモです。短い説明�
 
 | 対象 | 内容 |
 |---|---|
-| [Nanoの準備](setup/nano.md) | JetPack4.6.1、Ubuntu18.04、CUDA10.2 |
-| [GCC・CMake](setup/packages.md) | GCC/G++8.4.0、CMake3.28.6の導入 |
+| [Nano 4GBの初期設定](setup/nano.md) | MacでSD作成 → 画面で初回設定 → SSH接続 |
+| [基本開発環境](setup/packages.md) | apt・Python・CUDA確認、jtop/Docker、必要時だけLLM用ツール |
 | [llama.cpp](llama-cpp/README.md) | ソース取得、Nano用patch、CPUビルド、Qwen3推論 |
 | [GPU版](llama-cpp/gpu.md) | CUDA10.2用patchと追加ビルド手順 |
 | [PS4 Eye](ps4-eye/README.md) | firmwareロード、RGB配信、自作Python6本 |
