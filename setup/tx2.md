@@ -1,9 +1,5 @@
-# TX2への適用範囲
+# TX2
 
-TX2の実機環境は未調査です。このリポジトリで動作を確認した対象はNanoであり、TX2向けの固定ビルドコマンドはまだ確定していません。
+TX2は未検証です。移植時は対応するJetPack/L4T、GPU arch、電源条件を確認して別ビルドを作ります。
 
-移植するときは、まずボードに対応するJetPack/L4Tとflash方法を確定し、CUDA・GCC・CMakeの版を確認します。次にCPU命令の対象、CUDAのGPUアーキテクチャ、メモリ、電源条件を調整して別ビルドを作ります。Nanoのarch=53や生成済みバイナリをそのまま採用しません。
-
-PS4 EyeではUSBトポロジ、V4L2ノード、入力formatも実機で確認します。校正値はボードの機種よりもカメラ個体・解像度・切り出し・左右順に依存します。
-
-[Nanoの基本環境](nano.md)、[CPU構築](../llama-cpp/README.md)、[GPU構築](../llama-cpp/gpu.md)を参照し、TX2で確認した条件を独立して追記してください。
+参考：[Nanoの環境](nano.md)、[CPUビルド](../llama-cpp/README.md)、[GPUビルド](../llama-cpp/gpu.md)。

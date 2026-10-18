@@ -1,63 +1,39 @@
-# ソース修正を読む・再適用する
+# Nano向けのソース修正
 
-## 概要と前提
-
-patchは使用ソースへのローカル修正です。ビルドを通す互換処置と、数値演算の正しさの保証は同じではありません。エラーログや変更理由が保存されていない場合は、コードの意味からの説明と実際の動機を区別します。
-
-## 固定commitと適用単位
-
-| 構成 | ベースcommit | 原patch | 変更数 |
-|---|---|---|---:|
-| CPU | 62df1815bc053066761f4eac58e288f23778e164 | [llama.patch](llama.patch) | 5 |
-| b5050 GPU | 23106f94ea2bc3da929afb7330655fd5515d08dc | [llama5050gpu.patch](llama5050gpu.patch) | 7 |
-| Qwen3 GPU | d3bd7193ba66c15963fd1c59448f22019a8caf6e | [llama-qwen3-gpu.patch](llama-qwen3-gpu.patch) | 6 |
-
-最新branchへ適用するために加工していません。`jetson-patches`の参照commitはcba793e345442fc9f542f3418ae4b0070bd37b06で、ローカル追跡変更はありません。
-
-## CPU側の変更と意味
-
-| ファイル | 変更 | 技術的な意味・根拠の限界 |
+| 構成 | ベースcommit | patch |
 |---|---|---|
-| ggml/src/ggml-cpu/ggml-cpu-impl.h | NEONのx4ロードを4回の単独ロードにする | 16byteずつ4回読み、元の4ベクトルを組み立てる。古いARMヘッダでのintrinsic不足を避ける解析。実エラーのGCC revisionは未保存 |
-| tools/cli/CMakeLists.txt | stdc++fsをリンク | GCC8系のfilesystem実装を明示リンクする処置 |
-| tools/llama-bench/CMakeLists.txt | stdc++fsをリンク | benchでも同じリンク要件を扱う |
-| tools/server/server-context.cpp | iomanipをinclude | 書式操作の宣言を明示的に読み込む |
-| tools/server/server-schema.cpp | field_numのテンプレート型を明示 | decltypeで元の値の型を指定。古いコンパイラの型推論への対応という解析 |
+| CPU | 62df1815bc053066761f4eac58e288f23778e164 | [llama.patch](llama.patch) |
+| Qwen3 GPU | d3bd7193ba66c15963fd1c59448f22019a8caf6e | [llama-qwen3-gpu.patch](llama-qwen3-gpu.patch) |
+| 旧b5050 GPU | 23106f94ea2bc3da929afb7330655fd5515d08dc | [llama5050gpu.patch](llama5050gpu.patch) |
 
-stdc++fsの指定と、原benchのlink.txt末尾にあるwhole-archive追加は別です。後者はpatchだけに現れないため、追加経緯は未確定です。[CPUビルド](../README.md)で残る検証点として扱っています。
+## CPU
 
-## CUDA10.2側の変更
+| 変更ファイル | 修正理由・内容 |
+|---|---|
+| ggml/src/ggml-cpu/ggml-cpu-impl.h | 古いARMヘッダに合わせ、NEON x4ロードを単独ロード4回へ置換 |
+| tools/cli/CMakeLists.txt、tools/llama-bench/CMakeLists.txt | GCC8のfilesystem用にstdc++fsをリンク |
+| tools/server/server-context.cpp | iomanipをinclude |
+| tools/server/server-schema.cpp | field_numのテンプレート型を明示 |
 
-b5050はCPUのNEON代替に加え、次の6ファイルを変更します。
+元benchのlink.txtには `-Wl,--whole-archive -lstdc++fs -Wl,--no-whole-archive` もありました。patchだけではこの指定を再現できず、filesystemの未解決参照が残る場合の確認点です。
 
-| ファイル | 処置 | 意味 |
-|---|---|---|
-| CMakeLists.txt | archを50/61に設定する条件式を追加 | 新しい対象を避ける意図の参照資料。ただし条件式に問題がありcache53との相違を生む |
-| ggml/CMakeLists.txt | stdc++fsとcopy-dt-needed-entries | 古いリンク環境への対処という参照資料の説明 |
-| ggml/src/ggml-cuda/common.cuh | device配列のconstexprを除去 | 古いCUDAコンパイラの言語対応を避ける処置 |
-| ggml/src/ggml-cuda/fattn-common.cuh | builtin_assumeをコメント化 | 未対応builtinをコンパイルさせない |
-| ggml/src/ggml-cuda/fattn-vec-f16.cuh | 同上 | 同上 |
-| ggml/src/ggml-cuda/fattn-vec-f32.cuh | 同上 | 同上 |
+## CUDA10.2
 
-Qwen3構成は同じNEON/common/fattn系の処置に加え、`ggml/src/ggml-cuda/ggml-cuda.cu`のBF16 cuBLAS分岐を`CUDA_VERSION >= 11000`で囲みます。解析上、CUDA10.2で新しい分岐をコンパイル対象外にする処置です。
+| 変更ファイル | 修正理由・内容 |
+|---|---|
+| ggml/src/ggml-cuda/common.cuh | 古いnvcc向けにdevice配列のconstexprを除去 |
+| ggml/src/ggml-cuda/fattn-common.cuh、fattn-vec-f16.cuh、fattn-vec-f32.cuh | 未対応のbuiltin_assumeを除外 |
+| ggml/src/ggml-cuda/ggml-cuda.cu（Qwen3版） | CUDA11以降のBF16 cuBLAS分岐をCUDA_VERSION >= 11000で囲む |
+| CMakeLists.txt（b5050版） | arch指定を追加。[条件式の問題](../gpu.md#旧b5050版)あり |
+| ggml/CMakeLists.txt（b5050版） | stdc++fsとcopy-dt-needed-entriesを追加 |
 
-Qwen3のfattn-commonには`int(D/sizeof(int))`のcast除去5箇所、fattn-vec-f32にはGGML_UNUSEDブロックとloop castの除去も残っています。変更がある事実は確認済みですが、その場のエラーと実際の判断理由は未保存です。「すべてCUDA10.2の必須修正」とは断定しません。
+GPU版にもCPUのNEON互換処置を含みます。Qwen3版にはfattn-commonのcast除去5箇所、fattn-vec-f32のGGML_UNUSED・loop cast除去もありますが、個別の変更理由は不明です。
 
-## BF16ヘッダの役割と限界
-
-CUDA10.2向けに保存された [cuda_bf16.h](compat-headers/cuda_bf16.h) は、`nv_bfloat16`を`half`へtypedefする144byteの代替です。[cuda_bf16.hpp](compat-headers/cuda_bf16.hpp)は変換用の小さなラッパーです。
-
-BF16とFP16は指数部・仮数部の配分が異なります。typedefはコンパイル時の型を用意するもので、BF16ビット列の解釈や精度を正しく再現する実装ではありません。BF16モデルが正しく動いたという検証はありません。
-
-**実機のファイル/依存記録で確認済み**なのはCUDA10.2のinclude先の`.h`です。`.hpp`は確認したtoolkit include先に無く、このディレクトリのcompat-headersに保存版があります。配置方法は [GPUビルド](../gpu.md)へ集約しています。
+[BF16代替ヘッダの配置](../gpu.md#2-bf16代替ヘッダ) はGPU記事にまとめています。jetson-patchesの参照commitはcba793e345442fc9f542f3418ae4b0070bd37b06です。
 
 ## 未使用の試作
 
-[llama-cpu-legacy-neon-guard.patch](llama-cpu-legacy-neon-guard.patch) はCPUベース62df1815bc053066761f4eac58e288f23778e164に対する別案で、ggml/src/ggml-cpu/ggml-cpu-impl.hの互換ガードへGCC<9を追加します。現行CPU patchと併用せず、比較用に残しています。
-
-試作guardはaarch64でも古いGCC時に互換側へ入れる変更が残っています。実際の採用理由・動作成功は未保存で、NEON互換対応を試した可能性という解析です。現行patchと自動併用しません。
-
-試作を比較する場合だけ、現行patchを適用していない別ツリーへ適用します（新規ビルドは未検証）。
+[NEON guard案](llama-cpu-legacy-neon-guard.patch) はCPUベースにGCC<9条件を加える別案です。現行CPU patchとは併用しません。
 
 ```bash
 cd ~/jetson-work
@@ -69,4 +45,4 @@ git apply ~/Projects/jetson-lab/llama-cpp/patches/llama-cpu-legacy-neon-guard.pa
 
 ## ライセンス
 
-llama.cppとjetson-patches由来の通知は [licenses](../licenses/llama-LICENSE) と [jetson-patchesの通知](../licenses/jetson-patches-LICENSE) にあります。独自追加部分への新しい包括ライセンスは設定していません。
+[llama.cpp](../licenses/llama-LICENSE)、[旧GPU版](../licenses/llama5050gpu-LICENSE)、[jetson-patches](../licenses/jetson-patches-LICENSE) の通知を維持しています。独自追加部分の利用許諾は [LICENSE](../../LICENSE) を参照してください。
