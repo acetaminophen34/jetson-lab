@@ -2,6 +2,8 @@
 
 [llama.cpp](https://github.com/ggml-org/llama.cpp) でQwen3-0.6BをCPU実行します。クリーンビルドは未検証です。
 
+ビルド後の操作は [使い方：Nano / TX2](usage.md) を参照してください。
+
 ## 1. GCC8.4とCMake3.28.6を入れる
 
 [基本環境](../setup/packages.md) の準備後、GCC8とOpenSSL開発用ヘッダを入れます。システム標準のGCC/CMakeは残します。
