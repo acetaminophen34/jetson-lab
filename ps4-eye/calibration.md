@@ -8,7 +8,7 @@
 
 ## 校正ファイルの意味
 
-[独自校正コード](../../../src/ps4-eye/ps4_calibrate.py) の出力は`~/ps4_calib/stereo_calibration.npz`です。上流同梱の単眼param_*.npyとは別物です。
+[独自校正コード](scripts/ps4_calibrate.py) の出力は`~/ps4_calib/stereo_calibration.npz`です。上流同梱の単眼param_*.npyとは別物です。
 
 | 保存値 | 意味 |
 |---|---|
@@ -20,15 +20,15 @@
 | image_size / square_size_m | 1280×800、格子1辺0.020m |
 | rms_a / rms_b / rms_stereo | 保存した校正の再投影誤差 |
 
-**保存NPZからの静的解析**では、RMSはA0.379786、B0.373186、stereo0.394356px、Tのノルムによる基線は約80.03mmです。今回の再測定値ではありません。25ペアが保全されていますが、校正stdoutや縦ズレ統計は未保存です。
+**保存NPZからの静的解析**では、RMSはA0.379786、B0.373186、stereo0.394356px、Tのノルムによる基線は約80.03mmです。保存ペアは25組です。校正stdoutや縦ズレ統計は未確認です。
 
 ## 前提と校正資産の復元
 
-[撮影コード](../../../src/ps4-eye/README.md) と校正データは分けて復元します。補助スクリプトの--assets-onlyでNPZ、50枚PNG、previewだけを新規作業先へ取り出し、原文hashを照合します。
+[撮影コード](README.md) と校正データは分けて復元します。補助スクリプトの--assets-onlyでNPZ、50枚PNG、previewだけを新規作業先へ取り出し、校正データを復元します。
 
 ```bash
 export CAMERA_ASSETS="$LAB_WORK/camera-assets"
-python3 -B "$LAB_ROOT/scripts/restore-private-camera.py" \
+python3 -B "$LAB_ROOT/tools/restore-private-camera.py" \
   --private-root "$PRIVATE_ROOT" --manifest "$RECOVERY/manifest.json" \
   --dest "$CAMERA_ASSETS" --assets-only
 test ! -e "$HOME/ps4_calib" || exit 1
@@ -36,7 +36,7 @@ cp -R "$CAMERA_ASSETS/ps4_calib" "$HOME/ps4_calib"
 printf '%s  %s\n' e3dd00dab470d03cbddaa9af18bc5117777919291a0c6e333d322dfd24f7b9ce "$HOME/ps4_calib/stereo_calibration.npz" | sha256sum -c -
 ```
 
-NPZは3,610bytesです。成功はhashと元画像の揃いで判定します。[配信の保全コード](../../../src/ps4-eye/ps4_depth_stream.py) は個人パスをplaceholderに置換しています。作業コピーでCALIBを設定するか [Path.homeの任意案](../../../patches/ps4-eye/depth-stream-home-path.patch) を適用してください。元の固定パス原文は非公開のままです。HOME変数を別用途へ付け替える必要はありません。
+NPZは3,610bytesです。成功はhashと元画像の揃いで判定します。[配信の保全コード](scripts/ps4_depth_stream.py) は個人パスをplaceholderに置換しています。作業コピーでCALIBを設定するか [Path.homeの任意案](patches/depth-stream-home-path.patch) を適用してください。元の固定パス原文は非公開のままです。HOME変数を別用途へ付け替える必要はありません。
 
 ## 深度処理の順序と左右の向き
 
@@ -92,9 +92,8 @@ python3 "$CALIB_WORK/ps4_calib_capture.py"
 python3 "$CALIB_WORK/ps4_calibrate.py"
 ```
 
-結果はCALIB_WORKに保存されます。保存先を変えたdiffも新規記録に残します。RMS、縦ズレ、baseline、previewを確認し、既知距離で評価してから新しい校正を採用します。この再計算も撮影も未実施で、保存RMSを絶対的な合格閾値として創作しません。
+結果はCALIB_WORKに保存されます。保存先を変えたdiffも新規記録に残します。RMS、縦ズレ、baseline、previewを確認し、既知距離で評価してから新しい校正を採用します。再計算・撮影は未検証です。保存RMSを絶対的な合格閾値として創作しません。
 
-## 参照資料
+## トラブルシューティング
 
-- [出典S5](../../../reference/sources.md)、[NPZ識別子](../../../reference/environment-versions.md)
-- [検証範囲](../../../reference/validation-results.md)、[切り分け](../../troubleshooting.md)
+距離が負になる場合は左右順、B基準へのR/T変換、再計算Qの符号を確認します。整列が崩れる場合は入力の切り出し、image_size、縮小後K、レンズ歪みを確認します。校正NPZが読み込めても実距離精度の確認は別に必要です。

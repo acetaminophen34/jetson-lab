@@ -1,45 +1,21 @@
-# jetson-lab
+# Jetson Lab
 
-Jetson Nanoで、小さな言語モデルとUSBステレオカメラを扱うための技術ノートです。JetPackの構成、古いCUDAに合わせたC++の修正、画像取得と深度計算のつながりを説明し、同じソース・設定から環境を組み直す手順をまとめています。
+Jetsonで作ったプログラムと、環境を作り直すための手順をまとめています。説明・ソースコード・修正パッチをプロジェクトごとに管理します。
 
-**CPU版llama.cppでQwen3-0.6Bの推論を確認済みです。** GPUは電源上の制約があり、カメラはUSB認識まで確認しています。新規ビルドや撮影まで検証済みの教材ではありません。到達点と未検証範囲を各記事に示しています。
+## 使用環境
 
-## 読み方
+Jetson Nano（aarch64、RAM約4GB）、Ubuntu18.04.6、L4T32.7.1、CUDA10.2。再構築の目標はJetPack4.6.1です。TX2は移植先の候補で、実機検証はしていません。
 
-初めて読む場合は [環境の全体像](docs/environment/jetpack.md) → [llama.cpp](docs/projects/llama-cpp/README.md) または [PS4 Eye](docs/projects/ps4-eye/README.md) と進むと、コマンドの意味を理解しやすくなります。
+## 開発したもの
 
-環境を組み直す場合は **[再構築の入口](docs/getting-started.md)** から始めてください。OS準備 → 基本パッケージ → コンパイラ/CMake → ソース・patch → CPUビルド → モデル・推論 → カメラ → 任意のGPU、の順で各記事を案内します。
-
-## 実装コード
-
-[自作ソース](src/README.md) と [PS4 Eyeの6本](src/ps4-eye/README.md)、[保全・環境・検証スクリプト](scripts/README.md)、[原修正・試作・改善案のpatch](patches/README.md)を文書と一体で管理します。未使用の試作も残し、原文と公開用匿名化コピーをhashで区別します。[棚卸し・除外理由](reference/code-inventory.md)を参照してください。
-
-## 目次
-
-| 分野 | 記事 |
+| プロジェクト | 内容 |
 |---|---|
-| ハードウェア | [Nanoのメモリ・電源とTX2の扱い](docs/hardware.md) |
-| 基本環境 | [JetPack / L4T / Ubuntu / cuDNN / TensorRT](docs/environment/jetpack.md)、[CUDAとアーキテクチャ](docs/environment/cuda.md)、[GCCとCMakeの準備](docs/environment/build-tools.md) |
-| 言語モデル | [仕組みと構成](docs/projects/llama-cpp/README.md)、[CPUビルド・モデル・推論](docs/projects/llama-cpp/cpu-build.md)、[GPUビルド](docs/projects/llama-cpp/gpu-build.md)、[patchの内容と理由](docs/projects/llama-cpp/patches.md) |
-| カメラ | [PS4 Eyeの全体像](docs/projects/ps4-eye/README.md)、[firmwareとUSB](docs/projects/ps4-eye/firmware.md)、[撮影コードと配信](docs/projects/ps4-eye/capture.md)、[校正・視差・深度](docs/projects/ps4-eye/stereo-depth.md) |
-| 問題の切り分け | [トラブルシューティング](docs/troubleshooting.md) |
-| 参照 | [版と識別子](reference/environment-versions.md)、[検証結果](reference/validation-results.md)、[出典・非公開資産・ライセンス](reference/sources.md) |
+| [llama.cpp / Qwen3](llama-cpp/README.md) | 古いGCC/CUDAへの互換修正、CPU推論、GPUビルド手順。CPUで3.8 tokens/sを確認 |
+| [PS4 Eye](ps4-eye/README.md) | RGB配信、左右画像の切り出し、ステレオ校正、視差・深度処理。映像取得は未検証 |
+| [補助ツール](tools/README.md) | 校正データの復元、環境確認、保全・調査に使用したスクリプト |
 
-## 記述の読み分け
+## 環境を再構築する
 
-| 表記 | 意味 |
-|---|---|
-| **実機確認済み** | 保存された実機の観測・実行結果。対象と条件を限定する |
-| **静的確認済み** | ソース、設定、patch、保存データから確認。実行成功を意味しない |
-| **未検証** | 未実行の復元・新規ビルド・計測や、資料だけでは確定できない事項 |
-| **ユーザー申告** | 利用者の説明。電圧などを計測した結果とは区別する |
+[Nanoの準備](setup/nano.md) → [パッケージ・コンパイラ](setup/packages.md) → [CPU版LLM](llama-cpp/cpu.md) → [カメラ](ps4-eye/README.md) → [GPU版（任意）](llama-cpp/gpu.md)。
 
-背景の一般的な技術説明と、このNanoで観測した値も区別します。各記事末尾に根拠となる参照資料を示します。詳しいログやSHA-256は `reference/details/` に置き、通常の読み進め方から分離しています。
-
-## リポジトリの範囲
-
-公開用の文書、自作ソース、原patchと独立した試作/改善案、互換ヘッダ、補助スクリプトを管理します。元の `jetson-rebuild` と非公開保全先は別に残しています。モデル、firmware、外部カメラプロジェクト一式、校正バイナリ、撮影画像、巨大bundle、認証情報は含みません。自作カメラ5本は原文、1本は固定ホームを匿名化し、元の完全原文は非公開保管しています。
-
-編集時は `python3 -B scripts/check-repo.py` でリンク・shell構文・公開対象を検査します。新しい確認結果は技術記事を直し、根拠を [検証結果](reference/validation-results.md) へ追加します。調査日記を記事の末尾へ積み重ねません。
-
-全体への新規ライセンス付与は行っていません。[LICENSE](LICENSE) で権利の適用範囲を確認してください。この整理ではSSH接続・実機操作・追加取得を行わず、ローカルの独立Gitリポジトリとしてコミットしています。GitHubへのpushは公開内容確認後の工程です。
+TX2については [適用範囲](setup/tx2.md) を確認してください。

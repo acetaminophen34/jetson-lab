@@ -6,15 +6,14 @@
 公開と、再利用・再配布の包括的な許諾は別です。
 
 第三者コード由来部分は元の条件を維持します。
-- llama.cpp CPU由来: licenses/llama-LICENSE（MIT、2023–2026 The ggml authors）
-- llama.cpp b5050/Qwen3由来: licenses/llama5050gpu-LICENSE（MIT、2023–2024 The ggml authors）
-- jetson-patches由来の互換ヘッダ: licenses/jetson-patches-LICENSE（MIT、2025 Matthias Kreier）
+- llama.cpp CPU由来: llama-cpp/licenses/llama-LICENSE（MIT、2023–2026 The ggml authors）
+- llama.cpp b5050/Qwen3由来: llama-cpp/licenses/llama5050gpu-LICENSE（MIT、2023–2024 The ggml authors）
+- jetson-patches由来の互換ヘッダ: llama-cpp/licenses/jetson-patches-LICENSE（MIT、2025 Matthias Kreier）
 これらは各由来部分の通知であり、本リポジトリ独自部分の許諾には拡張しません。
 
-src/ps4-eyeはユーザーが自作・改造コードの保全を指示した取得済み6本です。
+ps4-eye/scriptsはユーザーが自作・改造コードの保全を指示した取得済み6本です。
 この申告と、第三者由来部分の包括的な著作権確認は区別します。
 独自コード・補助スクリプト・試作差分へ新しい包括ライセンスは付与しません。
 PS4 Eye上流プロジェクト全体とfirmwareの配布許諾は未確認で、
 その原コード一式、firmware、校正バイナリ、画像は含めていません。
 モデルの配布元とライセンスも未確認で、モデル本体は含めていません。
-GitHub公開前の確認事項はreference/sources.mdを参照してください。

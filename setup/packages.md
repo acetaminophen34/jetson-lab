@@ -8,7 +8,7 @@ CMakeはビルドの依存関係やコマンドを生成し、makeは生成さ�
 
 ## 前提条件
 
-[再構築の入口](../getting-started.md) の共通変数を設定し、OSの一致を確認してから進めます。以下は将来の初期化後の導入例で、現在の実機へ実行した記録ではありません。同版を取得できない場合は、配布元または保全debを確認して停止します。
+[再構築の入口](nano.md) の共通変数を設定し、OSの一致を確認してから進めます。以下は初期化後の導入手順です。同版を取得できない場合は、配布元または保全debを確認して停止します。
 
 ## 基本パッケージ
 
@@ -41,13 +41,25 @@ export LAB_CMAKE="$LAB_WORK/cmake-3.28.6-linux-aarch64/bin/cmake"
 
 ## 修正との関係
 
-GCC8向けのfilesystemリンク、ARM NEONの代替、古いコンパイラでの型指定を [patch解説](../projects/llama-cpp/patches.md) で扱います。OpenSSL1.1.1はcacheに見つかっていますが、固定CPUソースのHTTPS有効化条件は別です。ローカルモデルを読むだけの動作と、HTTPSでダウンロードできることを混同しません。
+GCC8向けのfilesystemリンク、ARM NEONの代替、古いコンパイラでの型指定を [patch解説](../llama-cpp/patches/README.md) で扱います。OpenSSL1.1.1はcacheに見つかっていますが、固定CPUソースのHTTPS有効化条件は別です。ローカルモデルを読むだけの動作と、HTTPSでダウンロードできることを混同しません。
 
-## 動作確認・未検証
+## 確認とトラブルシューティング
 
-元ツールの版は実機で確認済み、上の新規インストールと新規展開からのビルドは未検証です。全パッケージの導入順は未保存です。
+元ツールの版は実機で確認済み、上の新規インストールと新規展開からのビルドは未検証です。
 
-## 参照資料
+## Python・カメラ用ライブラリ
 
-- [版一覧](../../reference/environment-versions.md)、[出典S1・S3](../../reference/sources.md)
-- 次へ：[CPUビルド](../projects/llama-cpp/cpu-build.md)
+カメラのパッケージ導入コマンドは [PS4 Eyeの構築](../ps4-eye/README.md#構築) にまとめています。
+
+| 項目 | 使用版・機能 |
+|---|---|
+| Python / pip | 3.6.9 / 9.0.1 |
+| OpenCV | 4.1.1、libopencv=4.1.1-2-gd5a58aa75 |
+| cv2 | /usr/lib/python3.6/dist-packages/cv2/python-3.6配下のaarch64拡張 |
+| OpenCVの機能 | V4L2 YES、FFmpeg YES、GStreamer1.14.5 |
+| NumPy / Flask / PyUSB | 1.13.3 / 0.12.2 / 1.0.0 |
+| v4l-utils / libusb | 1.14.2-1 / 2:1.0.21-2 |
+| 上流viewer用Matplotlib / SciPy | 2.1.1 / 0.19.1（独自6本には必須ではない） |
+| OpenMP | 4.5、libgomp/pthread |
+
+OpenCVをこの実機で独自ビルドしたかは不明です。OpenCVのbuild情報にあるコンパイラ版と、llama.cppに指定するGCC8.4は別です。

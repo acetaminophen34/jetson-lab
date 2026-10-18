@@ -4,23 +4,23 @@
 
 GPU版は、CPUのホストコードに加えCUDAのdevice codeをコンパイルし、CUDA runtime・cuBLASなどをリンクします。新しいllama.cppの要求を古いCUDA10.2へ合わせるため、ソースcommitと互換patchをセットにします。
 
-**ユーザー申告**ではGPU起動時に電源容量不足で落ちました。安定したGPU推論は未検証で、AC電源対策を済ませるまではCPU経路を基本にします。この文書のビルド・起動は今回実行していません。
+**ユーザー申告**ではGPU起動時に電源容量不足で落ちました。安定したGPU推論は未検証で、AC電源対策を済ませるまではCPU経路を基本にします。
 
 ## 環境と構成を選ぶ
 
-[共通変数](../../getting-started.md)、GCC/G++8.4.0、CMake3.28.6、nvcc10.2.300を前提にします。二つの構成を別々の作業先へ置きます。
+[共通変数](../setup/nano.md)、GCC/G++8.4.0、CMake3.28.6、nvcc10.2.300を前提にします。二つの構成を別々の作業先へ置きます。
 
 | プロファイル | 目的 | ソース/patch |
 |---|---|---|
 | qwen3-gpu | Qwen3対応branchを基準にする | d3bd7193… + llama-qwen3-gpu.patch |
 | b5050-gpu | 古い互換修正を原状態で保全・再現する | 23106f94… + llama5050gpu.patch |
 
-完全commitと変更内容は [patch解説](patches.md)。b5050をQwen3対応済みとは扱いません。新しいCPU用commitへb5050の置換ファイルをコピーしてはいけません。
+完全commitと変更内容は [patch解説](patches/README.md)。b5050をQwen3対応済みとは扱いません。新しいCPU用commitへb5050の置換ファイルをコピーしてはいけません。
 
 ## 固定ソースとpatchを復元
 
 ```bash
-bash "$LAB_ROOT/scripts/restore-llama.sh" qwen3-gpu "$BACKUP" "$LAB_WORK"
+bash "$LAB_ROOT/llama-cpp/tools/restore-llama.sh" qwen3-gpu "$BACKUP" "$LAB_WORK"
 export GPU_SOURCE="$LAB_WORK/llama-qwen3-gpu"
 export GPU_BUILD="$GPU_SOURCE/build-gpu"
 git -C "$GPU_SOURCE" rev-parse HEAD
@@ -31,14 +31,14 @@ git -C "$GPU_SOURCE" diff --stat
 
 ## BF16代替ヘッダの配置
 
-元の実使用先は`/usr/local/cuda-10.2/targets/aarch64-linux/include/cuda_bf16.h`です。repoルートの保存版と同じ144bytesで、依存ファイルにも同じinclude先が残っています。`.hpp`は調べたCUDA include先にはありませんでした。
+元の実使用先は`/usr/local/cuda-10.2/targets/aarch64-linux/include/cuda_bf16.h`です。同梱のヘッダと同じ144bytesで、依存ファイルにも同じinclude先が残っています。`.hpp`は調べたCUDA include先にはありませんでした。
 
 初期化後、同ファイルが無い場合だけ配置します。既存ファイルがある時は上書きせずhashを比べます。
 
 ```bash
 export BF16_TARGET=/usr/local/cuda-10.2/targets/aarch64-linux/include/cuda_bf16.h
 if test ! -e "$BF16_TARGET"; then
-  sudo install -m 0644 "$LAB_ROOT/patches/compat-headers/cuda_bf16.h" "$BF16_TARGET"
+  sudo install -m 0644 "$LAB_ROOT/llama-cpp/patches/compat-headers/cuda_bf16.h" "$BF16_TARGET"
 fi
 printf '%s  %s\n' bfe47be09ef61153bea805be2c8121e47cd400686ac40a396e373679ebbe8490 "$BF16_TARGET" | sha256sum -c -
 ```
@@ -72,7 +72,7 @@ readelf -d "$GPU_BUILD/bin/libggml-cuda.so"
 ## b5050原状態を選ぶ場合
 
 ```bash
-bash "$LAB_ROOT/scripts/restore-llama.sh" b5050-gpu "$BACKUP" "$LAB_WORK"
+bash "$LAB_ROOT/llama-cpp/tools/restore-llama.sh" b5050-gpu "$BACKUP" "$LAB_WORK"
 export GPU_SOURCE="$LAB_WORK/llama-b5050-gpu"
 export GPU_BUILD="$GPU_SOURCE/build-gpu"
 ```
@@ -81,11 +81,38 @@ export GPU_BUILD="$GPU_SOURCE/build-gpu"
 
 ## 失敗時・動作確認の範囲
 
-nvccの引数、G++の選択、C++14、BF16 include、cuBLASの配置を順に確認します。詳しくは [CUDA](../../environment/cuda.md) と [トラブルシューティング](../../troubleshooting.md)。
+nvccの引数、G++の選択、C++14、BF16 include、cuBLASの配置を順に確認します。アーキテクチャとリンクの確認方法は以下に示します。
 
 保存時点では旧GPU/Qwen3のbenchとCUDA共有ライブラリは存在しますが、GPUのCLI/serverは調べた配置にありませんでした。生成物の存在から過去の全ビルド成功や現在ソースとの対応を断定しません。GPU起動・性能・安定性の確認は、電源対策後の独立した未検証工程です。
 
-## 参照資料
+## アーキテクチャ指定を確認する
 
-- [出典S2・S3・S8](../../../reference/sources.md)、[保存生成物](../../../reference/details/binary-inventory.md)
-- [patch解説](patches.md)、[ハードウェア](../../hardware.md)
+`CMAKE_CUDA_ARCHITECTURES`は生成するGPUコードの対象です。CMakeCacheは設定の保存値、compile_commandsは生成コマンドの記録で、両方を見る必要があります。
+
+| 構成 | cache値 | 生成コマンド | 判定 |
+|---|---|---|---|
+| 新しいllama.cpp/build-gpu | 53 | compute_53 / sm_53 | 設定は一致、新規ビルド成功は未確認 |
+| llama5050gpu.cpp/build | 53 | compute_50 / sm_50 と compute_61 / sm_61 | 原patchの条件式による上書きが説明になる |
+| llama-qwen3-gpu/build | 53 | compute_53 / sm_53 | 設定は一致、既存bench/.soは存在 |
+
+b5050の`if(NOT DEFINED ${CMAKE_CUDA_ARCHITECTURES})`は、変数名ではなく展開した値を存在確認へ渡します。そのためcache53でも通常変数を50/61へ変更する解析が成り立ちます。原patchはこの状態のまま保存しており、修正案を混ぜていません。
+
+## 再構築時の確認方法
+
+```sh
+/usr/local/cuda-10.2/bin/nvcc --version
+readlink -f /usr/local/cuda
+# GPU configureを実施した後の確認例。ここではビルドを開始しない。
+rg 'CMAKE_CUDA_(ARCHITECTURES|STANDARD|HOST_COMPILER)' "$GPU_BUILD/CMakeCache.txt"
+rg -- '--generate-code' "$GPU_BUILD/compile_commands.json"
+```
+
+`rg`が未導入なら`grep -E`へ読み替えられます。成功条件は、選んだ構成の記録と生成対象が説明できることです。失敗時はPATH、host compiler、別構成のpatch、CMake条件式を確認します。
+
+## CUDAのコンパイルとリンクを理解する
+
+nvccはdevice codeとCPU側host codeを扱います。GPU経路はG++8.4をhost compilerとして指定し、CUDA側はC++14です。CPU側C++17とは別の指定です。nvcc表示10.2.300とtoolkit package10.2.460-1も別の版識別子です。
+
+保存ELFで直接依存を確認したのはlibcudart.so.10.2、libcublas.so.10、libcuda.so.1です。libggml-cuda.soからこれらを使い、CLI/benchはlibllama、libggml、libggml-cpu、libggml-baseやpthreadもリンクします。cuDNN/TensorRTの導入をllama.cppの利用と読み替えません。
+
+CUDAのC++17要求、builtin_assume、constexpr device配列、BF16で止まる場合は [修正解説](patches/README.md) とconfigureのC++14・host compiler・include先を確認します。ライブラリ未検出は/usr/local/cuda-10.2/targets/aarch64-linux/libを確認します。リンク用stubs/libcudaは実行時ドライバの代わりにはなりません。
