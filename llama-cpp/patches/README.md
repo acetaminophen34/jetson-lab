@@ -29,7 +29,7 @@
 
 GPU版にもCPUのNEON互換処置を含みます。Qwen3版にはfattn-commonのcast除去5箇所、fattn-vec-f32のGGML_UNUSED・loop cast除去もありますが、個別の変更理由は不明です。
 
-[BF16代替ヘッダの配置](../gpu.md#2-bf16代替ヘッダ) はGPU記事にまとめています。jetson-patchesの参照commitはcba793e345442fc9f542f3418ae4b0070bd37b06です。
+[BF16代替ヘッダの配置](../README.md#bf16ヘッダを配置する) は導入記事にまとめています。jetson-patchesの参照commitはcba793e345442fc9f542f3418ae4b0070bd37b06です。
 
 ## 未使用の試作
 

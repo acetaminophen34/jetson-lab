@@ -1,6 +1,6 @@
-# 共通パッケージ・開発ツール
+# Nano / TX2の環境構築
 
-[Nano](nano.md) または [TX2](tx2.md) の初期設定後に進めます。Macと書かれた操作以外はJetson側で実行します。
+最初に機種に合うOSを用意します。[NanoのSDカード作成・初回起動](nano.md)、[TX2のJetPack導入](tx2.md) は機種別です。それ以降はこのページの順で進めます。Macと書かれた操作以外はJetson側で実行します。
 
 ## 1. SSHで接続する
 
@@ -52,7 +52,21 @@ sudo apt install --no-install-recommends --no-upgrade \
 
 Ubuntu18.04の配布名はbionicです。別のUbuntu向け配布先へ変更しないでください。
 
-## 3. インストールしたソフトを確認する
+## 3. リポジトリと作業場所
+
+Jetsonでcloneします。既にcloneしてある場合は、そのフォルダへ移動し、`export` 以降を実行します。
+
+```bash
+cd ~
+git clone https://github.com/acetaminophen34/jetson-lab.git
+cd jetson-lab
+export JETSON_LAB="$PWD"
+mkdir -p "$JETSON_LAB/work"
+```
+
+`work/` は取得したソース・モデル・作業用コードの置き場で、Git管理の対象外です。新しいSSH接続では、cloneしたフォルダで `export JETSON_LAB="$PWD"` を実行します。
+
+## 4. インストールしたソフトを確認する
 
 ```bash
 python3 --version
@@ -103,7 +117,7 @@ source ~/.bashrc
 nvcc --version
 ```
 
-## 4. 負荷表示とjtop
+## 5. 負荷表示とjtop
 
 [tegrastats](https://docs.nvidia.com/jetson/archives/l4t-archived/l4t-3276/Tegra%20Linux%20Driver%20Package%20Development%20Guide/AppendixTegraStats.html) でCPU・GPU・メモリの使用状況を表示します。終了はCtrl+Cです。
 
@@ -136,35 +150,4 @@ systemctl status jtop.service --no-pager
 journalctl -u jtop.service -n 30 --no-pager
 ```
 
-## 5. GCC/G++8.4.0
-
-llama.cpp用にGCC8を追加します。標準のGCCは残します。
-
-```bash
-sudo apt install gcc-8 g++-8 git wget libssl-dev
-```
-
-Nanoで使ったパッケージ版を固定する場合は、代わりに次を使います。
-
-```bash
-apt-cache policy gcc-8 g++-8 libssl-dev
-sudo apt install --no-install-recommends --no-upgrade \
-  gcc-8=8.4.0-1ubuntu1~18.04 g++-8=8.4.0-1ubuntu1~18.04 \
-  libssl-dev=1.1.1-1ubuntu2.1~18.04.23
-gcc-8 --version
-g++-8 --version
-```
-
-## 6. CMake3.28.6
-
-ビルド設定を作るCMakeは、標準版より新しい3.28.6を使います。[Kitware公式](https://github.com/Kitware/CMake/releases/tag/v3.28.6) からJetson用のLinux aarch64版を取得して展開します。
-
-```bash
-mkdir -p ~/opt ~/Downloads
-cd ~/Downloads
-wget https://github.com/Kitware/CMake/releases/download/v3.28.6/cmake-3.28.6-linux-aarch64.tar.gz
-tar -xzf cmake-3.28.6-linux-aarch64.tar.gz -C ~/opt
-~/opt/cmake-3.28.6-linux-aarch64/bin/cmake --version
-```
-
-次へ：[llama.cppのビルド](../llama-cpp/README.md)、[PS4 Eye](../ps4-eye/README.md)。
+次は [llama.cppの構築・実行](../llama-cpp/README.md)、または [PS4 Camera](../ps4-eye/README.md) へ進みます。

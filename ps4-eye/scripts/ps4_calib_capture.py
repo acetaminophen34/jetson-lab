@@ -1,8 +1,14 @@
+import argparse
 import cv2
 import time
 import threading
 from pathlib import Path
 from flask import Flask, Response, jsonify
+
+parser = argparse.ArgumentParser(description="PS4 Camera calibration capture")
+parser.add_argument("--camera", type=int, default=0,
+                    help="V4L2 camera index (default: 0)")
+args = parser.parse_args()
 
 app = Flask(__name__)
 
@@ -120,7 +126,7 @@ refreshCount();
 def camera_worker():
     global latest
 
-    cap = cv2.VideoCapture(0, cv2.CAP_V4L2)
+    cap = cv2.VideoCapture(args.camera, cv2.CAP_V4L2)
     if not cap.isOpened():
         print("ERROR: Cannot open /dev/video0", flush=True)
         return

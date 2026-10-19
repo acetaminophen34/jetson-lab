@@ -61,4 +61,4 @@ sudo apt update
 sudo apt install --no-upgrade nvidia-jetpack=4.6.1-b110
 ```
 
-次へ：[共通のSSH設定・開発ツール](packages.md)。
+次へ：[共通のSSH設定・開発ツール](README.md#1-sshで接続する)。

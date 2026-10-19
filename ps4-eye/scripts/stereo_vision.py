@@ -1,9 +1,15 @@
+import argparse
 import cv2
 import numpy as np
 import threading
 import time
 from pathlib import Path
 from flask import Flask, Response, request
+
+parser = argparse.ArgumentParser(description="PS4 Camera stereo face tracking")
+parser.add_argument("--camera", type=int, default=0,
+                    help="V4L2 camera index (default: 0)")
+args = parser.parse_args()
 
 # ===================================
 # Settings
@@ -96,7 +102,7 @@ matcher = cv2.StereoSGBM_create(
 def camera_worker():
     global raw, raw_id
 
-    cap = cv2.VideoCapture(0, cv2.CAP_V4L2)
+    cap = cv2.VideoCapture(args.camera, cv2.CAP_V4L2)
     cap.set(cv2.CAP_PROP_FOURCC,
             cv2.VideoWriter_fourcc(*"YUYV"))
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 3448)

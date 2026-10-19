@@ -30,4 +30,4 @@ sudo nvpmodel -q
 sudo nvpmodel -m 0
 ```
 
-次へ：[共通のSSH設定・開発ツール](packages.md)。
+次へ：[共通のSSH設定・開発ツール](README.md#1-sshで接続する)。
