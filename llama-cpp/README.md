@@ -248,3 +248,8 @@ CUDA_VISIBLE_DEVICES='' OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 \
 `no usable GPU found` 警告は出ましたが、CPU推論は成功しました。
 
 互換修正の詳細は [patches/README.md](patches/README.md)、旧b5050版だけを使う場合は [gpu.md](gpu.md) を参照してください。
+
+
+## 既存TX2環境でモデルを常駐させる
+
+[llama-server追加ビルド・HTTP確認](server.md)では、実機の`/home/a62ss/jetson-work/llama-tx2`にあるCUDA環境を維持してサーバーを追加します。このREADMEの`$JETSON_LAB/work/llama-cuda`は新規構築例で、実機の配置とは異なります。既存CLIの使い方は変更しません。
