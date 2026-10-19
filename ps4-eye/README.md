@@ -111,3 +111,32 @@ python3 ps4_stream.py
 |---|---|
 | No module named usb | python3-usbを導入（上のapt installに含む） |
 | COLORMAP_TURBOが使えない | COLORMAP_JETへ変更。深度コードに反映済み |
+
+## TX2での確認記録（2026-10-19）
+
+Jetson TX2でPS4 EyeのUSB接続とファームウェア初期化を確認しました。**映像の取得、配信、深度計算はまだ検証していません。** Nanoでの動作結果と区別してください。
+
+このときTX2側で使用したのは [ps4eye/ps4eye](https://github.com/ps4eye/ps4eye) の `python/ps4eye_init.py` です。上記のNano用の手順とは別のローダーを使用しました。ファームウェアの入手元は [psxdev/luke_firmwares](https://github.com/psxdev/luke_firmwares) で、`101_85C8E0_64036.bin`（64,036 bytes）を使用しました。バイナリは本リポジトリに再配布しません。
+
+```bash
+# TX2で確認した初期化コマンド（カメラ接続後）
+sudo apt install -y python3-usb v4l-utils
+cd ~/ps4eye/python
+sudo python3 ps4eye_init.py
+lsusb
+```
+
+`lsusb` のUSB IDは初期化前の `05a9:0580` から `05a9:058a` に変化しました。
+
+最初に `ModuleNotFoundError: No module named 'usb'` が出たため、PyUSB（`python3-usb`）を導入しました。また、一度 `PS4 camera not found` が出ていますが、これはその時点でローダーが `05a9:0580` のUSBデバイスを見つけられなかったという意味です。ファームウェア欠損と断定できません。
+
+**注意：デバイス番号はNanoと同じとは限りません。** TX2で `/dev/video0` を照会すると、PS4 Eyeで想定するYUYVではなく `BG10`（10-bit Bayer、2592×1944/2592×1458/1280×720）が表示されました。この結果だけで `/dev/video0` がPS4 Eyeだとは判断できません。配信コードのカメラ番号を変更する前に、必ずデバイスを特定してください。
+
+```bash
+v4l2-ctl --list-devices
+ls -l /dev/video*
+# 各デバイスを確認（存在する番号を使用する）
+v4l2-ctl -d /dev/video0 --list-formats-ext
+```
+
+次の作業は、TX2でPS4 Eyeに対応するV4L2デバイスを特定し、既存の `ps4-eye/scripts/` を使ってNanoと同じ映像取得・配信・深度処理を検証することです。
