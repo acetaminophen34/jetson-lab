@@ -4,7 +4,8 @@ Jetson Nano 4GB（JetPack4.6.1）とTX2 8GB（JetPack4.6.6）で使った環境�
 
 | 使いたいもの | 手順 |
 |---|---|
-| OS・SSH・基本ツール | [環境構築](setup/README.md) |
+| Nanoの初期設定 | [SDカード作成 → 初回起動 → SSH → 基本ツール](setup/nano.md) |
+| TX2の初期設定 | [JetPack導入 → SSH → 基本ツール](setup/tx2.md) |
 | Qwen3の文章生成 | [llama.cppのCPU/CUDAビルド・実行・ベンチマーク](llama-cpp/README.md) |
 | カメラの顔追跡・距離表示 | [PS4 Cameraの初期化・CPU/GPU実行](ps4-eye/README.md) |
 
@@ -12,4 +13,4 @@ Jetson Nano 4GB（JetPack4.6.1）とTX2 8GB（JetPack4.6.6）で使った環境�
 
 ## 作業場所を用意する
 
-初めて使う場合は [環境構築](setup/README.md#3-リポジトリと作業場所) から進めます。取得したソースやモデルは、clone先の `work/` にまとめます。
+初期設定の各ページにcloneと作業場所の設定を含めています。取得したソースやモデルは、clone先の `work/` にまとめます。
