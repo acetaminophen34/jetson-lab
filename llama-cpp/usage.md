@@ -1,5 +1,7 @@
 # llama.cppの使い方
 
+[作業場所の設定](../README.md#作業場所を用意する) を済ませ、同じターミナルで進めます。
+
 モデルの配置は [導入記事](README.md#モデルを用意する) を参照してください。`llama-cli` は文章生成・対話、`llama-bench` は性能測定に使います。
 
 ## 1. 実行ファイルのあるフォルダへ移動する
@@ -7,13 +9,13 @@
 **Nano CPU：**
 
 ```bash
-cd ~/jetson-work/llama-cpu/build-cpu/bin
+cd "$JETSON_LAB/work/llama-cpu/build-cpu/bin"
 ```
 
 **TX2 CUDA：**
 
 ```bash
-cd ~/jetson-work/llama-tx2/build-gpu/bin
+cd "$JETSON_LAB/work/llama-tx2/build-gpu/bin"
 ```
 
 以下はこのディレクトリから実行します。CPUは `-ngl 0`、TX2のGPU実行は `-ngl 99` です。TX2のCUDA版でも `-ngl 0` でCPU実行できます。
@@ -24,7 +26,7 @@ CPUで1回だけ回答させる例です。`-st` は1回の応答で終了しま
 
 ```bash
 LD_LIBRARY_PATH=. ./llama-cli \
-  -m ~/jetson-work/models/Qwen3-0.6B-Q4_K_M.gguf \
+  -m "$JETSON_LAB/work/models/Qwen3-0.6B-Q4_K_M.gguf" \
   -ngl 0 -t 4 -c 512 -n 64 -st -p "こんにちは。簡単に自己紹介してください。"
 ```
 
@@ -32,7 +34,7 @@ TX2で使ったGPU推論コマンドです。
 
 ```bash
 LD_LIBRARY_PATH=. ./llama-cli \
-  -m ~/jetson-work/models/Qwen3-0.6B-Q4_K_M.gguf \
+  -m "$JETSON_LAB/work/models/Qwen3-0.6B-Q4_K_M.gguf" \
   -ngl 99 -t 4 -c 512 -n 64 \
   -p "こんにちは。簡単に自己紹介してください。"
 ```
@@ -43,7 +45,7 @@ LD_LIBRARY_PATH=. ./llama-cli \
 
 | オプション | 内容 | 設定例 |
 |---|---|---|
-| `-m` | GGUFモデルのパス | `-m ~/jetson-work/models/Qwen3-0.6B-Q4_K_M.gguf` |
+| `-m` | GGUFモデルのパス | `-m "$JETSON_LAB/work/models/Qwen3-0.6B-Q4_K_M.gguf"` |
 | `-ngl` | GPUへ配置するレイヤー数。0でCPU実行 | `-ngl 0` / `-ngl 99` |
 | `-t` | CPUスレッド数 | `-t 4` |
 | `-c` | 入力・会話履歴・出力を保持するコンテキスト長 | `-c 512` |
@@ -64,7 +66,7 @@ LD_LIBRARY_PATH=. ./llama-cli \
 
 ```bash
 LD_LIBRARY_PATH=. ./llama-cli \
-  -m ~/jetson-work/models/Qwen3-0.6B-Q4_K_M.gguf \
+  -m "$JETSON_LAB/work/models/Qwen3-0.6B-Q4_K_M.gguf" \
   -ngl 0 -t 4 -c 1024 -n 256 --temp 0.7 -cnv \
   -sys "あなたは日本語で簡潔に回答するアシスタントです。/no_think"
 ```
@@ -77,7 +79,7 @@ LD_LIBRARY_PATH=. ./llama-cli \
 
 ```bash
 LD_LIBRARY_PATH=. ./llama-cli \
-  -m ~/jetson-work/models/Qwen3-1.7B-Q4_K_M.gguf \
+  -m "$JETSON_LAB/work/models/Qwen3-1.7B-Q4_K_M.gguf" \
   -ngl 99 -t 4 -c 512 -n 128 -cnv \
   -sys "あなたは日本語で簡潔に回答するアシスタントです。/no_think"
 ```
@@ -88,7 +90,7 @@ LD_LIBRARY_PATH=. ./llama-cli \
 
 ```bash
 LD_LIBRARY_PATH=. ./llama-bench \
-  -m ~/jetson-work/models/Qwen3-0.6B-Q4_K_M.gguf \
+  -m "$JETSON_LAB/work/models/Qwen3-0.6B-Q4_K_M.gguf" \
   -ngl 99 -t 4 -p 128 -n 32 -r 3
 ```
 
@@ -122,7 +124,7 @@ CUDA0 model buffer size = 372.65 MiB
 上のベンチマークとは別に、62df1815bを使って短い質問への応答速度を測りました。CPUは2スレッド、会話を保持する枠は512トークン、回答の上限は32トークンです。
 
 ```bash
-cd ~/jetson-work/llama-cpu
+cd "$JETSON_LAB/work/llama-cpu"
 CUDA_VISIBLE_DEVICES='' OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 \
   LD_LIBRARY_PATH=./build-cpu/bin \
   ./build-cpu/bin/llama-cli -m ../models/Qwen3-0.6B-Q4_K_M.gguf \

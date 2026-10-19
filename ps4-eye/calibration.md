@@ -4,7 +4,7 @@
 
 ## 1. 既存の校正データを使う
 
-手元の `ps4_calib` をホームへコピーします。校正はカメラ個体・解像度・切り出し設定に依存します。
+手元の `ps4_calib` をホームへコピーします。コードがこの場所を読み込むため、校正データだけは `work/` の外へ置きます。校正はカメラ個体・解像度・切り出し設定に依存します。
 
 ```bash
 cp -R ~/Downloads/ps4_calib ~/ps4_calib
@@ -25,7 +25,7 @@ mv ~/ps4_calib ~/ps4_calib.previous
 白黒のマス目が交わる点を横9個・縦6個数えられる、1マス20mmのチェッカーボードを使います。撮影画面 `http://<jetson-ip>:5002/` で位置・傾きを変えて10組以上保存します。
 
 ```bash
-cd ~/jetson-work/ps4-eye-custom
+cd "$JETSON_LAB/work/ps4-eye-custom"
 python3 ps4_calib_capture.py
 ```
 
@@ -42,7 +42,7 @@ python3 ps4_calibrate.py
 RGB配信・校正撮影を終了してから起動します。`~/ps4_calib/stereo_calibration.npz` を読み、`http://<jetson-ip>:5001/` へ配信します。
 
 ```bash
-cd ~/jetson-work/ps4-eye-custom
+cd "$JETSON_LAB/work/ps4-eye-custom"
 python3 ps4_depth_stream.py
 ```
 
@@ -60,7 +60,7 @@ NPZのK/Dは内部行列・歪み、R/Tは左右の配置、Qは視差から3次
 相対視差と左右順を調べる試作です。一つずつ実行します。
 
 ```bash
-cd ~/jetson-work/ps4-eye-custom
+cd "$JETSON_LAB/work/ps4-eye-custom"
 python3 ps4_depth.py
 python3 ps4_depth_test.py
 ```

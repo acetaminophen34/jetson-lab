@@ -12,12 +12,25 @@ Nano 4GB（JetPack4.6.1）とTX2（JetPack4.6.6）でllama.cppとPS4 Eyeを使�
 
 カメラ：[PS4 Eyeの撮影・配信](ps4-eye/README.md) → [校正・距離計算](ps4-eye/calibration.md)。
 
-以降のコマンドでは、Jetson上の `~/Projects/jetson-lab` にこのリポジトリがあるものとします。ソースやモデルは `~/jetson-work` に置きます。
+## 作業場所を用意する
 
-初期設定と共通パッケージの導入後、Jetson側で取得してください。
+初期設定と共通パッケージの導入後、Jetson側で好きな場所へcloneします。次はホームディレクトリへ置く例です。
 
 ```bash
-mkdir -p ~/Projects
-cd ~/Projects
+cd ~
 git clone https://github.com/acetaminophen34/jetson-lab.git
+cd jetson-lab
+export JETSON_LAB="$PWD"
+mkdir -p "$JETSON_LAB/work"
 ```
+
+既にcloneしてある場合は、そのフォルダで次を実行します。
+
+```bash
+export JETSON_LAB="$PWD"
+mkdir -p "$JETSON_LAB/work"
+```
+
+`JETSON_LAB` はclone先の場所です。同じターミナルで各記事のコマンドを続けて実行してください。新しいSSH接続では、cloneしたフォルダへ移動してもう一度設定します。
+
+ソース・モデル・作業用コードは `work/` に保存します。このフォルダはGit管理の対象外です。GCC/CMakeの導入は [共通開発ツール](setup/packages.md) を参照してください。

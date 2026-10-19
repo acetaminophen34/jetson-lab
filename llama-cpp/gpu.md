@@ -1,5 +1,7 @@
 # CUDA10.2のビルド
 
+[作業場所の設定](../README.md#作業場所を用意する) を済ませ、同じターミナルで進めます。
+
 [共通開発ツール](../setup/packages.md) のGCC/G++8.4.0、CMake3.28.6を使います。
 
 | 設定 | Nano | TX2 |
@@ -18,13 +20,13 @@ Nanoでは電源容量不足でGPU起動時に落ちたため、ACアダプタ�
 [llama.cpp](https://github.com/ggml-org/llama.cpp) を取得し、Qwen3を使えるバージョンへ切り替えます。[修正パッチ](patches/llama-qwen3-gpu.patch) は、CUDA10.2にない機能を使う箇所を修正します。
 
 ```bash
-mkdir -p ~/jetson-work
-cd ~/jetson-work
+mkdir -p "$JETSON_LAB/work"
+cd "$JETSON_LAB/work"
 git clone https://github.com/ggml-org/llama.cpp.git llama-tx2
 cd llama-tx2
 git checkout d3bd7193ba66c15963fd1c59448f22019a8caf6e
-git apply --check ~/Projects/jetson-lab/llama-cpp/patches/llama-qwen3-gpu.patch
-git apply ~/Projects/jetson-lab/llama-cpp/patches/llama-qwen3-gpu.patch
+git apply --check "$JETSON_LAB/llama-cpp/patches/llama-qwen3-gpu.patch"
+git apply "$JETSON_LAB/llama-cpp/patches/llama-qwen3-gpu.patch"
 ```
 
 ## 2. BF16代替ヘッダ
@@ -32,9 +34,9 @@ git apply ~/Projects/jetson-lab/llama-cpp/patches/llama-qwen3-gpu.patch
 CUDA10.2には、ソースが必要とする `cuda_bf16.h` がありません。リポジトリ内の [代替ヘッダ](patches/compat-headers/cuda_bf16.h) をコピーし、次のビルド設定から読み込ませます。BF16用の型を既存のhalf型で代用するもので、BF16演算への対応ではありません。
 
 ```bash
-mkdir -p ~/jetson-work/cuda-compat
-cp ~/Projects/jetson-lab/llama-cpp/patches/compat-headers/cuda_bf16.h \
-  ~/jetson-work/cuda-compat/
+mkdir -p "$JETSON_LAB/work/cuda-compat"
+cp "$JETSON_LAB/llama-cpp/patches/compat-headers/cuda_bf16.h" \
+  "$JETSON_LAB/work/cuda-compat/"
 ```
 
 <details>
@@ -44,7 +46,7 @@ cp ~/Projects/jetson-lab/llama-cpp/patches/compat-headers/cuda_bf16.h \
 
 ```bash
 if [ ! -e /usr/local/cuda-10.2/targets/aarch64-linux/include/cuda_bf16.h ]; then
-  sudo install -m 0644 ~/Projects/jetson-lab/llama-cpp/patches/compat-headers/cuda_bf16.h \
+  sudo install -m 0644 "$JETSON_LAB/llama-cpp/patches/compat-headers/cuda_bf16.h" \
     /usr/local/cuda-10.2/targets/aarch64-linux/include/cuda_bf16.h
 fi
 ```
@@ -56,7 +58,7 @@ fi
 CUDA10.2、G++8、GPUの種類を指定してビルド設定を作ります。`CMAKE_CUDA_FLAGS` は、先ほどコピーしたヘッダの場所です。
 
 ```bash
-cd ~/jetson-work/llama-tx2
+cd "$JETSON_LAB/work/llama-tx2"
 
 ~/opt/cmake-3.28.6-linux-aarch64/bin/cmake -S . -B build-gpu \
   -DCMAKE_BUILD_TYPE=Release \
@@ -67,7 +69,7 @@ cd ~/jetson-work/llama-tx2
   -DCMAKE_CUDA_ARCHITECTURES=62 \
   -DCMAKE_CUDA_STANDARD=14 \
   -DCMAKE_CUDA_STANDARD_REQUIRED=ON \
-  -DCMAKE_CUDA_FLAGS="-I$HOME/jetson-work/cuda-compat" \
+  -DCMAKE_CUDA_FLAGS="-I\"$JETSON_LAB/work/cuda-compat\"" \
   -DGGML_CUDA=ON \
   -DGGML_NATIVE=OFF \
   -DGGML_CPU_ARM_ARCH=armv8-a \
@@ -93,13 +95,13 @@ cd ~/jetson-work/llama-tx2
 Qwen3用ではない旧構成です。別ツリーに専用patchを適用します。ビルドはこのツリー内で、上のCMake設定・ビルドコマンドを実行します（先頭の `cd` は省略）。
 
 ```bash
-cd ~/jetson-work
+cd "$JETSON_LAB/work"
 git clone https://github.com/ggml-org/llama.cpp.git llama-b5050-gpu
 cd llama-b5050-gpu
 git checkout 23106f94ea2bc3da929afb7330655fd5515d08dc
-git apply ~/Projects/jetson-lab/llama-cpp/patches/llama5050gpu.patch
-cp ~/Projects/jetson-lab/llama-cpp/patches/compat-headers/cuda_bf16.h .
-cp ~/Projects/jetson-lab/llama-cpp/patches/compat-headers/cuda_bf16.hpp .
+git apply "$JETSON_LAB/llama-cpp/patches/llama5050gpu.patch"
+cp "$JETSON_LAB/llama-cpp/patches/compat-headers/cuda_bf16.h" .
+cp "$JETSON_LAB/llama-cpp/patches/compat-headers/cuda_bf16.hpp" .
 ```
 
 `if(NOT DEFINED ${CMAKE_CUDA_ARCHITECTURES})` の問題により、設定で53を指定しても、実際には別のGPU向け（50/61）にビルドされる問題があります。CMakeの設定時に `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` を追加すると、次のコマンドで実際のGPU指定を読めます。

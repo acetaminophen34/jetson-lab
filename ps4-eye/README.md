@@ -1,5 +1,7 @@
 # PS4 Eyeで撮影・配信する
 
+[作業場所の設定](../README.md#作業場所を用意する) を済ませ、同じターミナルで進めます。
+
 PS4 Eyeから左右の映像を取り込み、MacのSafariへ配信します。画像の保存と、人物・背景の距離の違いを色で表示する処理も作成しました。
 
 以下のコマンドはJetsonで実行します。
@@ -21,8 +23,8 @@ python3 -c 'import cv2,numpy,flask,usb; print(cv2.__version__,numpy.__version__,
 [sieuwe1のプロジェクト](https://github.com/sieuwe1/PS4-eye-camera-for-linux-with-python-and-OpenCV) を使います。カメラを起動するファームウェアも配布元に含まれています（ライセンス不明のため、このリポジトリには含めていません）。
 
 ```bash
-mkdir -p ~/jetson-work
-cd ~/jetson-work
+mkdir -p "$JETSON_LAB/work"
+cd "$JETSON_LAB/work"
 git clone https://github.com/sieuwe1/PS4-eye-camera-for-linux-with-python-and-OpenCV.git ps4-eye-upstream
 cd ps4-eye-upstream
 git checkout 4180061a1afd109a9204557f256d341c5850c124
@@ -35,7 +37,7 @@ cd Firmware_loader
 
 ```bash
 sudo modprobe uvcvideo
-cd ~/jetson-work/ps4-eye-upstream/Firmware_loader
+cd "$JETSON_LAB/work/ps4-eye-upstream/Firmware_loader"
 sudo python3 ps4eye_init.py
 ```
 
@@ -65,12 +67,15 @@ v4l2-ctl -d /dev/video0 --list-ctrls-menus
 自作Pythonコード6本を作業用フォルダへコピーします。続けて、古いFlask・Python3.6への対応と、校正ファイルの読み込み先を直すパッチを適用します（この互換パッチを使った起動は未検証）。
 
 ```bash
-mkdir ~/jetson-work/ps4-eye-custom
-cp ~/Projects/jetson-lab/ps4-eye/scripts/*.py ~/jetson-work/ps4-eye-custom/
-cd ~/jetson-work/ps4-eye-custom
-git apply ~/Projects/jetson-lab/ps4-eye/patches/ps4-stream-flask012.patch
-git apply ~/Projects/jetson-lab/ps4-eye/patches/ps4-calib-python36.patch
-git apply ~/Projects/jetson-lab/ps4-eye/patches/depth-stream-home-path.patch
+mkdir -p "$JETSON_LAB/work/ps4-eye-custom"
+cp "$JETSON_LAB/ps4-eye/scripts/"*.py "$JETSON_LAB/work/ps4-eye-custom/"
+cd "$JETSON_LAB/work/ps4-eye-custom"
+git -C "$JETSON_LAB" apply --directory=work/ps4-eye-custom \
+  "$JETSON_LAB/ps4-eye/patches/ps4-stream-flask012.patch"
+git -C "$JETSON_LAB" apply --directory=work/ps4-eye-custom \
+  "$JETSON_LAB/ps4-eye/patches/ps4-calib-python36.patch"
+git -C "$JETSON_LAB" apply --directory=work/ps4-eye-custom \
+  "$JETSON_LAB/ps4-eye/patches/depth-stream-home-path.patch"
 ```
 
 | コード | 用途 |
@@ -87,7 +92,7 @@ git apply ~/Projects/jetson-lab/ps4-eye/patches/depth-stream-home-path.patch
 起動後、MacのSafariで `http://<jetson-ip>:5000/` を開きます。
 
 ```bash
-cd ~/jetson-work/ps4-eye-custom
+cd "$JETSON_LAB/work/ps4-eye-custom"
 python3 ps4_stream.py
 ```
 

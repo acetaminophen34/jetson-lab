@@ -33,14 +33,14 @@ GPU版にもCPUのNEON互換処置を含みます。Qwen3版にはfattn-common�
 
 ## 未使用の試作
 
-[NEON guard案](llama-cpu-legacy-neon-guard.patch) はCPUベースにGCC<9条件を加える別案です。現行CPU patchとは併用しません。
+[作業場所の設定](../../README.md#作業場所を用意する) 後に実行します。[NEON guard案](llama-cpu-legacy-neon-guard.patch) はCPUベースにGCC<9条件を加える別案です。現行CPU patchとは併用しません。
 
 ```bash
-cd ~/jetson-work
+cd "$JETSON_LAB/work"
 git clone https://github.com/ggml-org/llama.cpp.git llama-neon-trial
 cd llama-neon-trial
 git checkout 62df1815bc053066761f4eac58e288f23778e164
-git apply ~/Projects/jetson-lab/llama-cpp/patches/llama-cpu-legacy-neon-guard.patch
+git apply "$JETSON_LAB/llama-cpp/patches/llama-cpu-legacy-neon-guard.patch"
 ```
 
 ## ライセンス
