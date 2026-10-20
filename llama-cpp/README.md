@@ -252,4 +252,4 @@ CUDA_VISIBLE_DEVICES='' OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 \
 
 ## 既存TX2環境でモデルを常駐させる
 
-[llama-server追加ビルド・HTTP確認](server.md)では、実機の`/home/a62ss/jetson-work/llama-tx2`にあるCUDA環境を維持してサーバーを追加します。このREADMEの`$JETSON_LAB/work/llama-cuda`は新規構築例で、実機の配置とは異なります。既存CLIの使い方は変更しません。
+[llama-server追加ビルド・HTTP確認](server.md)では、構築済みのCUDA環境を維持してサーバーを追加します。作業パスは環境に合わせて設定してください。既存CLIの使い方は変更しません。

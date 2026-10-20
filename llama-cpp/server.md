@@ -21,24 +21,17 @@ LD_LIBRARY_PATH="$LLAMA_BUILD/bin${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
 
 初めてllama.cpp自体を構築する場合は、先に[CPU/CUDA環境構築](README.md)を使ってください。ここではJetPack、CUDA、コンパイラ、モデルの導入済み環境を扱います。パッケージの追加インストールやモデルの再取得は不要です。
 
-## 作業ディレクトリの違い
+## 参照先を設定する
 
-| 対象 | READMEの新規構築例 | 現在のTX2実機 |
-|---|---|---|
-| 環境管理リポジトリ | `$JETSON_LAB` | `/home/a62ss/Projects/jetson-lab` |
-| llama.cppソース | `$JETSON_LAB/work/llama-cuda` | `/home/a62ss/jetson-work/llama-tx2` |
-| CUDAビルド | 上記の `build-gpu` | `/home/a62ss/jetson-work/llama-tx2/build-gpu` |
-| モデル | `$JETSON_LAB/work/models` | `/home/a62ss/jetson-work/models` |
-
-実機ではQwen3-1.7B-Q4_K_M.ggufとllama-cliのGPU推論が動作確認されています。ここでのllama-server追加ビルドとHTTP推論は、まだ実機で検証していません。既存ディレクトリを移動・削除したり、モデルを取り直す必要はありません。
+cloneしたjetson-labのルートで、環境に合わせて参照先を設定します。以下は標準手順の`work/`に構築した場合です。別の作業ディレクトリで構築済みの場合は、`LLAMA_SRC`と`LLAMA_MODEL`をその配置に変更してください。既存環境を移動したりモデルを取り直す必要はありません。
 
 ## 既存ビルドの検査と追加ビルド
 
-実機のターミナルで実行します。`CMAKE`は導入済みの3.28.6を指定します。新規構築例のディレクトリを使っている場合は`LLAMA_SRC`だけを変更してください。
+実機のターミナルで実行します。`CMAKE`は導入済みの3.28.6を指定します。既存環境の配置が異なる場合は`LLAMA_SRC`を変更してください。
 
 ```bash
-export JETSON_LAB=/home/a62ss/Projects/jetson-lab
-export LLAMA_SRC=/home/a62ss/jetson-work/llama-tx2
+export JETSON_LAB="$PWD"   # cloneしたjetson-labのルートで実行
+export LLAMA_SRC="$JETSON_LAB/work/llama-cuda"
 export LLAMA_BUILD="$LLAMA_SRC/build-gpu"
 export CMAKE="$HOME/opt/cmake-3.28.6-linux-aarch64/bin/cmake"
 ```
@@ -80,7 +73,7 @@ LD_LIBRARY_PATH="$LLAMA_BUILD/bin${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
 ## 起動とHTTP確認
 
 ```bash
-export LLAMA_MODEL=/home/a62ss/jetson-work/models/Qwen3-1.7B-Q4_K_M.gguf
+export LLAMA_MODEL="$JETSON_LAB/work/models/Qwen3-1.7B-Q4_K_M.gguf"
 mkdir -p "$JETSON_LAB/logs"
 LD_LIBRARY_PATH="$LLAMA_BUILD/bin${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
   "$LLAMA_BUILD/bin/llama-server" \

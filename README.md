@@ -16,4 +16,4 @@ Jetson Nano 4GB（JetPack4.6.1）とTX2 8GB（JetPack4.6.6）で使った環境�
 
 初期設定の各ページにcloneと作業場所の設定を含めています。取得したソースやモデルは、clone先の `work/` にまとめます。
 
-TX2の既存推論環境が`/home/a62ss/jetson-work/llama-tx2`にある場合は、[サーバー手順の実機パス](llama-cpp/server.md#作業ディレクトリの違い)を使います。`work/llama-cuda`は新規構築時の配置例です。
+既存の推論環境が標準の`work/llama-cuda`以外にある場合は、[サーバー手順の参照先設定](llama-cpp/server.md#参照先を設定する)を環境に合わせて変更してください。
