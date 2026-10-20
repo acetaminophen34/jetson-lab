@@ -2,6 +2,25 @@
 
 build5092（commit `d3bd7193ba66c15963fd1c59448f22019a8caf6e`）のCUDA 10.2パッチ適用済み環境を使います。Robiなどのアプリケーション固有の対話実装は、このリポジトリには配置しません。
 
+## 導入の流れ
+
+CUDA版llama-cliが動く既存環境に、同じソース・設定で`llama-server`実行ファイルを追加します。
+
+1. 以下の実機パスを設定し、commit・CUDA・既存パッチを確認する。
+2. `build-gpu/bin/llama-server`が未作成なら、既存CMakeキャッシュを使ってサーバーのターゲットだけをビルドする。
+3. サーバーをlocalhostで起動し、`/health`と`/completion`を確認する。
+4. 確認用サーバーを停止し、利用するアプリケーションを起動する。
+
+すでに同じbuild5092のサーバーが導入済みなら、追加ビルドを繰り返す必要はありません。下のパス設定後、次のコマンドで実行ファイルを確認できます。
+
+```bash
+test -x "$LLAMA_BUILD/bin/llama-server"
+LD_LIBRARY_PATH="$LLAMA_BUILD/bin${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
+  "$LLAMA_BUILD/bin/llama-server" --version
+```
+
+初めてllama.cpp自体を構築する場合は、先に[CPU/CUDA環境構築](README.md)を使ってください。ここではJetPack、CUDA、コンパイラ、モデルの導入済み環境を扱います。パッケージの追加インストールやモデルの再取得は不要です。
+
 ## 作業ディレクトリの違い
 
 | 対象 | READMEの新規構築例 | 現在のTX2実機 |
