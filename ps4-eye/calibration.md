@@ -10,16 +10,13 @@ CPU/GPU版は `~/ps4_calib/stereo_calibration.npz` から、レンズの歪み�
 
 画像取得に使うデバイスは [READMEの手順](README.md#3-カメラ番号を選ぶ) で特定します。撮影時もREADMEで選んだ `CAMERA` の番号を `--camera` で渡します。
 
+READMEの準備スクリプトが、校正用コードのコピーとPython3.6用パッチの適用も行います。まだ実行していない場合は、clone先で実行してください。
+
 ```bash
-mkdir -p "$JETSON_LAB/work/ps4-eye-custom"
-cp "$JETSON_LAB/ps4-eye/scripts/ps4_calib_capture.py" \
-  "$JETSON_LAB/ps4-eye/scripts/ps4_calibrate.py" \
-  "$JETSON_LAB/work/ps4-eye-custom/"
-git -C "$JETSON_LAB" apply --directory=work/ps4-eye-custom \
-  "$JETSON_LAB/ps4-eye/patches/ps4-calib-python36.patch"
+bash "$JETSON_LAB/ps4-eye/tools/setup-camera.sh"
 ```
 
-パッチは、Python3.6で使えない `unlink(missing_ok=True)` を置き換えます。既存データを残して撮り直す場合は、先に `~/ps4_calib` を別名へ移してください。
+既存データを残して撮り直す場合は、先に `~/ps4_calib` を別名へ移してください。
 
 ### 2. 左右の校正画像を撮る
 

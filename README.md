@@ -28,6 +28,7 @@ jetson-lab/
 ├── ps4-eye/
 │   ├── README.md          初期化から顔追跡・距離表示まで
 │   ├── scripts/           カメラのPythonコード
+│   ├── tools/             ライブラリ確認・配置・パッチ適用の準備スクリプト
 │   ├── calibration/       保存済みの校正データ
 │   └── calibration.md     新しいカメラの校正手順
 ├── work/                  取得したソース・モデル・ビルド結果

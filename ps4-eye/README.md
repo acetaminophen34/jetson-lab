@@ -11,19 +11,53 @@
 
 Nano 4GBはJetPack4.6.1、TX2 8GBはJetPack4.6.6 / L4T R32.7.6、Ubuntu18.04.6を使用しました。Python3、OpenCV4.1.1、CUDA10.2の環境で進めます。
 
-Jetson上でcloneした `jetson-lab` の直下から開始します。
+Jetson上でcloneした `jetson-lab` の直下で実行します。[setup-camera.sh](tools/setup-camera.sh) が不足パッケージの導入、顔検出モデル・校正データの配置、作業用コードへのパッチ適用をまとめて行います。
 
 ```bash
 export JETSON_LAB="$PWD"
-mkdir -p "$JETSON_LAB/work"
-sudo apt update
-sudo apt install --no-install-recommends --no-upgrade \
-  libopencv libopencv-python python3-numpy python3-flask python3-usb \
-  v4l-utils libusb-1.0-0-dev
-python3 -c 'import cv2,numpy,flask,usb; print(cv2.__version__,numpy.__version__,flask.__version__,usb.__version__)'
+bash ps4-eye/tools/setup-camera.sh
 ```
 
-NanoではPython3.6.9、NumPy1.13.3、Flask0.12.2、PyUSB1.0.0を使用しました。
+GPU版も使う場合は、代わりに `--gpu` を付けます。JetPack4系のVPI Pythonパッケージも準備します。
+
+```bash
+bash ps4-eye/tools/setup-camera.sh --gpu
+```
+
+確認だけなら `--check` を使います。不足があれば対象を表示し、終了コード1で終了します。
+
+```bash
+bash ps4-eye/tools/setup-camera.sh --check
+# VPIも確認する場合
+bash ps4-eye/tools/setup-camera.sh --check --gpu
+```
+
+### 準備するもの
+
+| 用途 | パッケージ・配置先 |
+|---|---|
+| 映像取得・画像処理 | JetPackの `libopencv`・`libopencv-python`、`python3-numpy` |
+| ブラウザ配信 | `python3-flask` |
+| ファームウェアローダー・デバイス確認 | `python3-usb`、`v4l-utils` |
+| ソース・モデル取得 | `git`、`wget` |
+| GPU視差計算（`--gpu`） | `libnvvpi1`、`python3-vpi1` |
+| 作業用コード | `work/ps4-eye-custom/` |
+| 校正データ | `~/ps4_calib/stereo_calibration.npz` |
+| 顔検出モデル | `~/models/deploy.prototxt`、`~/models/res10.caffemodel` |
+
+NanoではPython3.6.9、NumPy1.13.3、Flask0.12.2、PyUSB1.0.0を使用しました。インストール済みのパッケージと既存ファイルは保持します。校正データの初回配置は、登録済みデータと同じカメラを使う前提です。
+
+### 適用するパッチ
+
+最新版の `stereo_vision.py` と `stereo_vision_gpu.py` に追加パッチは不要です。以下は校正撮影・旧コードの作業用コピーだけに適用します。適用済みならスキップし、元の `scripts/` は変更しません。
+
+| パッチ | 対象 | 修正内容 |
+|---|---|---|
+| [ps4-calib-python36.patch](patches/ps4-calib-python36.patch) | `ps4_calib_capture.py` | Python3.6で使えない `unlink(missing_ok=True)` を置き換える |
+| [ps4-stream-flask012.patch](patches/ps4-stream-flask012.patch) | `ps4_stream.py` | 画像保存時の引数をFlask0.12の `attachment_filename` に合わせる |
+| [depth-stream-home-path.patch](patches/depth-stream-home-path.patch) | `ps4_depth_stream.py` | 校正データの固定ユーザーパスをホームディレクトリ基準にする |
+
+パッチを適用できない変更済みファイルがある場合は、その場で停止します。ファームウェア初期化と撮影は、このスクリプトでは実行しません。
 
 ## 2. カメラを初期化する
 
@@ -82,29 +116,24 @@ v4l2-ctl -d "/dev/video$CAMERA" --list-formats-ext
 
 ## 4. 校正データと顔検出モデルを配置する
 
-登録済みの [校正データ](calibration/stereo_calibration.npz) はNanoで使ったPS4 Cameraのものです。**同じカメラをTX2へ移す場合はそのまま再利用できます。** 別のカメラや、解像度・切り出し・レンズ配置を変更する場合だけ [再校正](calibration.md) します。
+手順1で次の場所へ配置されます。既存ファイルがあれば上書きしません。
 
-```bash
-mkdir -p ~/ps4_calib ~/models
-cp -i "$JETSON_LAB/ps4-eye/calibration/stereo_calibration.npz" \
-  ~/ps4_calib/stereo_calibration.npz
+```text
+~/ps4_calib/stereo_calibration.npz
+~/models/deploy.prototxt
+~/models/res10.caffemodel
 ```
 
-OpenCV公式の [ネットワーク定義](https://github.com/opencv/opencv/tree/master/samples/dnn/face_detector) と [学習済みモデル](https://github.com/opencv/opencv_3rdparty/tree/dnn_samples_face_detector_20170830) を取得します。CPU/GPU版とも同じファイルを読みます。
+[登録済みの校正データ](calibration/stereo_calibration.npz) はNanoで使用したカメラのものです。同じカメラをTX2へ移す場合は再利用できます。別のカメラや、解像度・切り出し・レンズ配置を変える場合は [再校正](calibration.md) します。
 
-```bash
-wget -O ~/models/deploy.prototxt \
-  https://raw.githubusercontent.com/opencv/opencv/master/samples/dnn/face_detector/deploy.prototxt
-wget -O ~/models/res10.caffemodel \
-  https://raw.githubusercontent.com/opencv/opencv_3rdparty/dnn_samples_face_detector_20170830/res10_300x300_ssd_iter_140000.caffemodel
-```
+顔検出モデルの配布元はOpenCV公式の [ネットワーク定義](https://github.com/opencv/opencv/tree/master/samples/dnn/face_detector) と [学習済みモデル](https://github.com/opencv/opencv_3rdparty/tree/dnn_samples_face_detector_20170830) です。取得URLは準備スクリプトに記載しています。
 
 ## 5. CPU版を起動する
 
 カメラを使うプログラムは1本ずつ実行します。ソースを書き換えず、`--camera` で番号を渡します。
 
 ```bash
-python3 "$JETSON_LAB/ps4-eye/scripts/stereo_vision.py" --camera "$CAMERA"
+python3 "$JETSON_LAB/work/ps4-eye-custom/stereo_vision.py" --camera "$CAMERA"
 ```
 
 MacのSafariなどで `http://<jetson-ip>:5001/` を開きます。上段は顔枠と距離、下段は補正後の映像と視差の色表示です。終了はCtrl+Cです。
@@ -118,17 +147,12 @@ MacのSafariなどで `http://<jetson-ip>:5001/` を開きます。上段は顔�
 
 ## 6. GPU版を起動する
 
-JetPack4系の [VPI Pythonパッケージ](https://docs.nvidia.com/jetson/archives/jetpack-archived/jetpack-461/install-jetpack/index.html) を用意します。インストール済みならimport確認から進めます。
-
-```bash
-sudo apt install --no-install-recommends --no-upgrade libnvvpi1 python3-vpi1
-python3 -c 'import vpi; print(vpi.__version__)'
-```
+手順1を `--gpu` 付きで実行しておきます。
 
 CPU版を終了してから起動します。配信URLは同じです。
 
 ```bash
-python3 "$JETSON_LAB/ps4-eye/scripts/stereo_vision_gpu.py" --camera "$CAMERA"
+python3 "$JETSON_LAB/work/ps4-eye-custom/stereo_vision_gpu.py" --camera "$CAMERA"
 ```
 
 GPU版は `vpi.stereodisp()` をCUDAで実行し、`window=5`・`maxdisp=128` を使います。顔検出・追跡・距離表示はCPU版と共通で、顔検出をTensorRTへ変更する処理はありません。
