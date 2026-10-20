@@ -2,6 +2,46 @@
 
 build5092（commit `d3bd7193ba66c15963fd1c59448f22019a8caf6e`）のCUDA 10.2パッチ適用済み環境を使います。Robiなどのアプリケーション固有の対話実装は、このリポジトリには配置しません。
 
+## スクリプトで追加する
+
+jetson-labをcloneし、構築済みのCUDA環境にサーバーを追加できます。JetPack・CUDA・GCC・llama.cppの初回構築は[環境構築手順](README.md)を先に済ませてください。このスクリプトはパッケージやモデルのダウンロード、sudo操作、既存ソースのリセットを行いません。
+
+```bash
+git clone https://github.com/acetaminophen34/jetson-lab.git
+cd jetson-lab
+# 既にclone済みなら、そのフォルダへ移動して以下を実行
+bash llama-cpp/tools/setup-server.sh --check
+bash llama-cpp/tools/setup-server.sh
+```
+
+標準ではclone先の`work/llama-cuda/build-gpu`を参照します。別の場所に既存環境がある場合は、例えば次のように指定します。個々の環境の配置に合わせてください。
+
+```bash
+export LLAMA_SRC="$HOME/jetson-work/llama-tx2"
+export LLAMA_BUILD="$LLAMA_SRC/build-gpu"
+bash llama-cpp/tools/setup-server.sh --check
+bash llama-cpp/tools/setup-server.sh
+```
+
+実行場所に関係なくスクリプト自身からリポジトリを特定します。CMakeは既存キャッシュの`CMAKE_COMMAND`を使います。移動などで無効な場合は`CMAKE=/path/to/cmake`で指定できます。並列数はメモリ消費を抑えるため1で、`BUILD_JOBS=2`などで変更できます。
+
+| オプション | 動作 |
+|---|---|
+| なし | 検査後、未導入なら既存キャッシュでllama-serverだけをビルド |
+| `--check` | 検査だけ。設定変更・ビルドを行わない |
+| `--rebuild` | 導入済みでもサーバーを再ビルド |
+| `--help` | オプションと環境変数の説明 |
+
+commit、CUDA有効化、arch62、GCC8、CUDA10.2、BF16ヘッダ参照、適用済みパッチが期待と違う場合は、変更前に停止します。既存CMake設定を維持して`LLAMA_BUILD_SERVER=ON`だけを指定します。ビルド失敗時は非ゼロ終了し、ソースやビルド成果物を削除しません。途中のビルド成果物は残ることがあります。モデルは使わず、最後に`llama-server --version`で実行ファイルを確認します。HTTP推論の確認は後述の「起動とHTTP確認」で行います。
+
+開発用のモックテストは次のコマンドで実行できます。実コンパイラ・GPU・ネットワークを使いません。
+
+```bash
+python3 llama-cpp/tools/test_setup_server.py -v
+```
+
+実機での追加ビルドは未検証です。以下に同じ処理の手動手順も残しています。
+
 ## 導入の流れ
 
 CUDA版llama-cliが動く既存環境に、同じソース・設定で`llama-server`実行ファイルを追加します。

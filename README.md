@@ -17,3 +17,14 @@ Jetson Nano 4GB（JetPack4.6.1）とTX2 8GB（JetPack4.6.6）で使った環境�
 初期設定の各ページにcloneと作業場所の設定を含めています。取得したソースやモデルは、clone先の `work/` にまとめます。
 
 既存の推論環境が標準の`work/llama-cuda`以外にある場合は、[サーバー手順の参照先設定](llama-cpp/server.md#参照先を設定する)を環境に合わせて変更してください。
+
+## 既存CUDA環境にサーバーを追加する
+
+構築済みのTX2向けllama.cppがある場合は、clone先で次を実行します。
+
+```bash
+bash llama-cpp/tools/setup-server.sh --check
+bash llama-cpp/tools/setup-server.sh
+```
+
+既存環境の検査とllama-serverだけの追加ビルドを行います。初回のCUDA環境構築は含みません。標準の`work/llama-cuda`以外を参照する設定や実行オプションは[サーバー導入手順](llama-cpp/server.md#スクリプトで追加する)を参照してください。
