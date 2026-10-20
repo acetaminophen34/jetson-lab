@@ -28,7 +28,7 @@ jetson-lab/
 ├── ps4-eye/
 │   ├── README.md          初期化から顔追跡・距離表示まで
 │   ├── scripts/           カメラのPythonコード
-│   ├── tools/             ライブラリ確認・配置・パッチ適用の準備スクリプト
+│   ├── tools/             ライブラリ確認・データ配置の準備スクリプト
 │   ├── calibration/       保存済みの校正データ
 │   └── calibration.md     新しいカメラの校正手順
 ├── work/                  取得したソース・モデル・ビルド結果
@@ -51,8 +51,8 @@ cloneと作業場所の設定は、初期設定の各ページに含めていま
 | `work/llama-cuda/build-gpu/bin/` | CUDA版のllama.cpp実行ファイル |
 | `work/models/` | Qwen3などのGGUFモデル |
 | `work/ps4eye/` | カメラのファームウェアローダー |
-| `~/ps4_calib/` | カメラ実行時に読み込む校正データ |
-| `~/models/` | 顔検出モデル |
+| `work/ps4-eye/calibration/` | カメラ実行時に読み込む校正データ |
+| `work/ps4-eye/models/` | 顔検出モデル |
 
 llama.cppの取得したソースは、それぞれ `work/llama-cpu/` と `work/llama-cuda/` にあります。
 

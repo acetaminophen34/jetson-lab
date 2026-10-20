@@ -11,7 +11,7 @@
 
 Nano 4GBはJetPack4.6.1、TX2 8GBはJetPack4.6.6 / L4T R32.7.6、Ubuntu18.04.6を使用しました。Python3、OpenCV4.1.1、CUDA10.2の環境で進めます。
 
-Jetson上でcloneした `jetson-lab` の直下で実行します。[setup-camera.sh](tools/setup-camera.sh) が不足パッケージの導入、顔検出モデル・校正データの配置、作業用コードへのパッチ適用をまとめて行います。
+Jetson上でcloneした `jetson-lab` の直下で実行します。[setup-camera.sh](tools/setup-camera.sh) が不足パッケージの導入と顔検出モデル・校正データの配置をまとめて行います。
 
 ```bash
 export JETSON_LAB="$PWD"
@@ -41,23 +41,13 @@ bash ps4-eye/tools/setup-camera.sh --check --gpu
 | ファームウェアローダー・デバイス確認 | `python3-usb`、`v4l-utils` |
 | ソース・モデル取得 | `git`、`wget` |
 | GPU視差計算（`--gpu`） | `libnvvpi1`、`python3-vpi1` |
-| 作業用コード | `work/ps4-eye-custom/` |
-| 校正データ | `~/ps4_calib/stereo_calibration.npz` |
-| 顔検出モデル | `~/models/deploy.prototxt`、`~/models/res10.caffemodel` |
+| 作業用コード | `ps4-eye/scripts/` |
+| 校正データ | `work/ps4-eye/calibration/stereo_calibration.npz` |
+| 顔検出モデル | `work/ps4-eye/models/deploy.prototxt`、`work/ps4-eye/models/res10.caffemodel` |
 
 NanoではPython3.6.9、NumPy1.13.3、Flask0.12.2、PyUSB1.0.0を使用しました。インストール済みのパッケージと既存ファイルは保持します。校正データの初回配置は、登録済みデータと同じカメラを使う前提です。
 
-### 適用するパッチ
-
-最新版の `stereo_vision.py` と `stereo_vision_gpu.py` に追加パッチは不要です。以下は校正撮影・旧コードの作業用コピーだけに適用します。適用済みならスキップし、元の `scripts/` は変更しません。
-
-| パッチ | 対象 | 修正内容 |
-|---|---|---|
-| [ps4-calib-python36.patch](patches/ps4-calib-python36.patch) | `ps4_calib_capture.py` | Python3.6で使えない `unlink(missing_ok=True)` を置き換える |
-| [ps4-stream-flask012.patch](patches/ps4-stream-flask012.patch) | `ps4_stream.py` | 画像保存時の引数をFlask0.12の `attachment_filename` に合わせる |
-| [depth-stream-home-path.patch](patches/depth-stream-home-path.patch) | `ps4_depth_stream.py` | 校正データの固定ユーザーパスをホームディレクトリ基準にする |
-
-パッチを適用できない変更済みファイルがある場合は、その場で停止します。ファームウェア初期化と撮影は、このスクリプトでは実行しません。
+コードは `ps4-eye/scripts/` を直接使います。データの配置先は `PS4_EYE_DATA` で変更できます（既定：リポジトリ内の `work/ps4-eye/`）。
 
 ## 2. カメラを初期化する
 
@@ -71,7 +61,7 @@ wget -O firmware.bin \
   https://raw.githubusercontent.com/psxdev/luke_firmwares/master/101_85C8E0_64036.bin
 ```
 
-カメラを接続して実行します。TX2で用意済みの `~/ps4eye/python/` を使う場合は、そこへ移動して同じ初期化コマンドを実行します。
+カメラを接続し、`$JETSON_LAB/work/ps4eye/python/` で実行します。
 
 ```bash
 sudo modprobe uvcvideo
@@ -119,9 +109,9 @@ v4l2-ctl -d "/dev/video$CAMERA" --list-formats-ext
 手順1で次の場所へ配置されます。既存ファイルがあれば上書きしません。
 
 ```text
-~/ps4_calib/stereo_calibration.npz
-~/models/deploy.prototxt
-~/models/res10.caffemodel
+work/ps4-eye/calibration/stereo_calibration.npz
+work/ps4-eye/models/deploy.prototxt
+work/ps4-eye/models/res10.caffemodel
 ```
 
 [登録済みの校正データ](calibration/stereo_calibration.npz) はNanoで使用したカメラのものです。同じカメラをTX2へ移す場合は再利用できます。別のカメラや、解像度・切り出し・レンズ配置を変える場合は [再校正](calibration.md) します。
@@ -133,7 +123,7 @@ v4l2-ctl -d "/dev/video$CAMERA" --list-formats-ext
 カメラを使うプログラムは1本ずつ実行します。ソースを書き換えず、`--camera` で番号を渡します。
 
 ```bash
-python3 "$JETSON_LAB/work/ps4-eye-custom/stereo_vision.py" --camera "$CAMERA"
+python3 "$JETSON_LAB/ps4-eye/scripts/stereo_vision.py" --camera "$CAMERA"
 ```
 
 MacのSafariなどで `http://<jetson-ip>:5001/` を開きます。上段は顔枠と距離、下段は補正後の映像と視差の色表示です。終了はCtrl+Cです。
@@ -152,14 +142,14 @@ MacのSafariなどで `http://<jetson-ip>:5001/` を開きます。上段は顔�
 CPU版を終了してから起動します。配信URLは同じです。
 
 ```bash
-python3 "$JETSON_LAB/work/ps4-eye-custom/stereo_vision_gpu.py" --camera "$CAMERA"
+python3 "$JETSON_LAB/ps4-eye/scripts/stereo_vision_gpu.py" --camera "$CAMERA"
 ```
 
 GPU版は `vpi.stereodisp()` をCUDAで実行し、`window=5`・`maxdisp=128` を使います。顔検出・追跡・距離表示はCPU版と共通で、顔検出をTensorRTへ変更する処理はありません。
 
 ## 7. CPU/GPUの性能を比較する
 
-[benchmark_stereo.py](scripts/benchmark_stereo.py) は、`~/ps4_calib/pairs/` の最初の `camA_*.png`・`camB_*.png` を使います。同じカメラの校正NPZと、手元に保存した校正画像を配置して実行します。
+[benchmark_stereo.py](scripts/benchmark_stereo.py) は、`work/ps4-eye/calibration/pairs/` の最初の `camA_*.png`・`camB_*.png` を使います。同じカメラの校正NPZと、手元に保存した校正画像を配置して実行します。
 
 ```bash
 python3 "$JETSON_LAB/ps4-eye/scripts/benchmark_stereo.py"

@@ -2,10 +2,9 @@ import cv2
 import vpi
 import numpy as np
 import time
-from pathlib import Path
+from camera_paths import CALIB_DIR, CALIBRATION
 
-home = Path.home()
-p = sorted((home/"ps4_calib/pairs").glob("camA_*.png"))[0]
+p = sorted((CALIB_DIR / "pairs").glob("camA_*.png"))[0]
 a = cv2.imread(str(p))
 b = cv2.imread(str(p).replace("camA_", "camB_"))
 
@@ -13,7 +12,7 @@ size = (480,300)
 a = cv2.resize(a,size)
 b = cv2.resize(b,size)
 
-c = np.load(str(home/"ps4_calib/stereo_calibration.npz"))
+c = np.load(str(CALIBRATION))
 
 def scale(K):
     K=K.copy()

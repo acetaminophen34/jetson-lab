@@ -3,13 +3,14 @@ import numpy as np
 import threading
 import time
 from flask import Flask, Response, request
+from camera_paths import CALIBRATION
 
 app = Flask(__name__)
 condition = threading.Condition()
 latest = None
 frame_id = 0
 
-CALIB = "/home/JETSON_USER/ps4_calib/stereo_calibration.npz"
+CALIB = str(CALIBRATION)
 SIZE = (640, 400)
 FULL_SIZE = (1280, 800)
 

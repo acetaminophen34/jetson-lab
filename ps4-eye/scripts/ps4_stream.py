@@ -242,7 +242,7 @@ def snapshot():
         io.BytesIO(jpg),
         mimetype="image/jpeg",
         as_attachment=True,
-        download_name="ps4_stereo.jpg"
+        attachment_filename="ps4_stereo.jpg"
     )
 
 if __name__ == "__main__":

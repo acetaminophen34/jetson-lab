@@ -1,8 +1,9 @@
 import cv2
 import numpy as np
-from pathlib import Path
+from camera_paths import DATA
 
-OUT = Path.home()
+OUT = DATA
+OUT.mkdir(parents=True, exist_ok=True)
 
 cap = cv2.VideoCapture(0, cv2.CAP_V4L2)
 cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"YUYV"))

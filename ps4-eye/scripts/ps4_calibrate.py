@@ -1,8 +1,7 @@
 import cv2
 import numpy as np
-from pathlib import Path
+from camera_paths import CALIB_DIR as BASE
 
-BASE = Path.home() / "ps4_calib"
 PAIRS = BASE / "pairs"
 OUTPUT = BASE / "stereo_calibration.npz"
 

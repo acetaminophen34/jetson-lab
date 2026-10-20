@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import threading
 import time
-from pathlib import Path
+from camera_paths import CALIBRATION as CALIB, PROTO, MODEL
 from flask import Flask, Response, request
 
 parser = argparse.ArgumentParser(description="PS4 Camera stereo face tracking")
@@ -21,10 +21,6 @@ FACE_TIMEOUT = 1.8
 DISPARITIES = 96
 JPEG_QUALITY = 75
 
-HOME = Path.home()
-CALIB = HOME / "ps4_calib/stereo_calibration.npz"
-PROTO = HOME / "models/deploy.prototxt"
-MODEL = HOME / "models/res10.caffemodel"
 
 cv2.setNumThreads(2)
 app = Flask(__name__)

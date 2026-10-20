@@ -2,7 +2,7 @@ import argparse
 import cv2
 import time
 import threading
-from pathlib import Path
+from camera_paths import CALIB_DIR
 from flask import Flask, Response, jsonify
 
 parser = argparse.ArgumentParser(description="PS4 Camera calibration capture")
@@ -12,7 +12,7 @@ args = parser.parse_args()
 
 app = Flask(__name__)
 
-OUT = Path.home() / "ps4_calib" / "pairs"
+OUT = CALIB_DIR / "pairs"
 OUT.mkdir(parents=True, exist_ok=True)
 
 BOARD = (9, 6)  # 内側の交点
@@ -218,8 +218,11 @@ def capture():
     if not (saved_a and saved_b):
         with lock:
             count -= 1
-        pa.unlink(missing_ok=True)
-        pb.unlink(missing_ok=True)
+        for failed_path in (pa, pb):
+            try:
+                failed_path.unlink()
+            except FileNotFoundError:
+                pass
         return jsonify(ok=False, message="保存に失敗しました")
 
     return jsonify(
